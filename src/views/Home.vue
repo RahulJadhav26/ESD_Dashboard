@@ -1,6 +1,6 @@
 <template>
 <div>
-  <h1 class="text-center">Dashboard</h1>
+  <h1 class="text-center" style="text-decoration:underline;">DASHBOARD</h1>
   <div>
 
   </div>
