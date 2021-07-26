@@ -1,17 +1,24 @@
 <template>
 <div class="container">
     <v-card>
+      <v-toolbar flat>
       <v-card-title>
         <h2>{{data[0].device.thing_name}}</h2>
         <v-spacer></v-spacer>
-        <v-text-field
+      </v-card-title>
+      <v-spacer></v-spacer>
+      <v-spacer></v-spacer>
+      <v-card-actions>
+        <v-btn @click="getData()">Refresh</v-btn>
+      </v-card-actions>
+      <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
           label="Search"
           single-line
           hide-details
         ></v-text-field>
-      </v-card-title>
+      </v-toolbar>
       <v-data-table
         :headers="headers"
         :search="search"
@@ -23,7 +30,7 @@
     <v-card>
       <v-card-title>
         <h1 class="mr-2">Alerts</h1>
-        <subscript>Threshold:{{alertData[0].event_data.triggerData.triggers[0].conditions[0].value}}</subscript>
+        <subscript v-if="checkAlert">Threshold:{{alertData[0].event_data.triggerData.triggers[0].conditions[0].value}}</subscript>
         <v-spacer></v-spacer>
         <v-text-field
           v-model="alertsearch"
@@ -57,10 +64,6 @@ export default {
     date: new Date(),
     headers: [
       {
-        text: ' Battery Level',
-        value: 'battery'
-      },
-      {
         text: 'Internal Temperature',
         value: 'internalTemp'
       },
@@ -75,6 +78,10 @@ export default {
       {
         text: 'SNR',
         value: 'SNR'
+      },
+      {
+        text: ' Battery Level',
+        value: 'battery'
       },
       {
         text: 'TimeStamp',
@@ -105,7 +112,14 @@ export default {
       payload: 'payload',
       alertPayload: 'alertPayload',
       alertData: 'alertData'
-    })
+    }),
+    checkAlert () {
+      if (this.alertData.length === 0) {
+        return false
+      } else {
+        return true
+      }
+    }
   },
   methods: {
     ...mapActions({

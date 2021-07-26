@@ -2,7 +2,6 @@
 <div>
   <h1 class="text-center" style="text-decoration:underline;">DASHBOARD</h1>
   <div>
-
   </div>
   <div>
   <Table/>

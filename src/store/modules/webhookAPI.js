@@ -10,14 +10,15 @@ const mutations = {
     routes.getData().then(data => {
       state.data = []
       state.payload = []
-      for (var i in data.data) {
-        if (data.data[i].event_type === 'alert') {
-          data.data[i].customPayload = data.data[i].event_data
-          state.alertData.push(data.data[i])
+      for (var i in data.data.data) {
+        if (data.data.data[i].event_type === 'alert') {
+          console.log(data.data.data[i].event_type)
+          data.data.data[i].customPayload = data.data.data[i].event_data
+          state.alertData.push(data.data.data[i])
           console.log(data.data[i].customPayload)
-          state.alertPayload.push(data.data[i].customPayload)
+          state.alertPayload.push(data.data.data[i].customPayload)
         } else {
-          var date = new Date(data.data[i].event_data.payload[0].timestamp)
+          var date = new Date(data.data.data[i].event_data.payload[0].timestamp)
           date = date.getHours() +
           ':' + date.getMinutes() +
           ':' + date.getSeconds() +
@@ -25,17 +26,17 @@ const mutations = {
           '/' + (date.getMonth() + 1) +
           '/' + date.getFullYear()
           var obj = {
-            battery: data.data[i].event_data.payload[0].value,
-            internalTemp: data.data[i].event_data.payload[1].value,
-            humidity: data.data[i].event_data.payload[2].value,
-            RSSI: data.data[i].event_data.payload[3].value,
-            SNR: data.data[i].event_data.payload[4].value,
+            battery: data.data.data[i].event_data.payload[0].value,
+            internalTemp: data.data.data[i].event_data.payload[1].value * 9 / 5 + 32,
+            humidity: data.data.data[i].event_data.payload[2].value,
+            RSSI: data.data.data[i].event_data.payload[3].value,
+            SNR: data.data.data[i].event_data.payload[4].value,
             timestamp: date
           }
           state.payload.push(obj)
         }
       }
-      state.data = data.data
+      state.data = data.data.data
       console.log(state.data)
     })
   }
