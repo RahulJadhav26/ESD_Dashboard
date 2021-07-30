@@ -10,12 +10,13 @@ const mutations = {
     routes.getData().then(data => {
       state.data = []
       state.payload = []
+      console.log(data.data.data)
       for (var i in data.data.data) {
         if (data.data.data[i].event_type === 'alert') {
           console.log(data.data.data[i].event_type)
           data.data.data[i].customPayload = data.data.data[i].event_data
           state.alertData.push(data.data.data[i])
-          console.log(data.data[i].customPayload)
+          console.log(data.data.data[i].customPayload)
           state.alertPayload.push(data.data.data[i].customPayload)
         } else {
           var date = new Date(data.data.data[i].event_data.payload[0].timestamp)
