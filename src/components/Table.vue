@@ -17,7 +17,7 @@
           >
             <template v-slot:activator="{ on, attrs }">
               <v-btn
-              class="mr-4"
+              class="mr-5"
                 v-bind="attrs"
                 v-on="on"
               >
@@ -49,7 +49,7 @@
                               prepend-icon="mdi-calendar"
                               readonly
                             ></v-text-field>
-                            Selected: {{ dates }}
+                            <!-- Selected: {{ dates }} -->
                           </v-col>
                         </v-row>
                   </v-card-text>
@@ -95,7 +95,7 @@
     <v-card>
       <v-card-title>
         <h1 class="mr-2">Alerts</h1>
-        <p v-if="checkAlert">Threshold:{{alertData[0].event_data.triggerData.triggers[0].conditions[0].value}}</p>
+        <!-- <p v-if="checkAlert">Threshold:{{alertData[0].event_data.triggerData.triggers[0].conditions[0].value}}</p> -->
         <v-spacer></v-spacer>
         <v-text-field
           v-model="alertsearch"
@@ -105,6 +105,7 @@
           hide-details
         ></v-text-field>
       </v-card-title>
+      <v-card-text v-if="checkAlert">Threshold:{{alertData[0].event_data.triggerData.triggers[0].conditions[0].value}}</v-card-text>
     <v-data-table
         :headers="alertheaders"
         :search="alertsearch"
