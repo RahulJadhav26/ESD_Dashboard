@@ -1,10 +1,9 @@
 <template>
-<div class="container">
+<div style="margin:40px;">
     <v-card>
       <v-toolbar flat>
       <v-card-title>
         <h2>{{data[0].device.thing_name}}</h2>
-        <v-spacer></v-spacer>
       </v-card-title>
       <v-spacer></v-spacer>
       <v-spacer></v-spacer>
@@ -17,7 +16,7 @@
           >
             <template v-slot:activator="{ on, attrs }">
               <v-btn
-              class="mr-5"
+              class="mr-5 primary"
                 v-bind="attrs"
                 v-on="on"
               >
@@ -73,8 +72,8 @@
                 </v-card>
               </v-dialog>
             </v-row>
-        <v-btn @click="DownloadAll()">Download All</v-btn>
-        <v-btn @click="getData()">Refresh</v-btn>
+        <v-btn class="primary" @click="DownloadAll()">Download All</v-btn>
+        <v-btn class="primary" @click="getData()">Refresh</v-btn>
       </v-card-actions>
       <v-text-field
           v-model="search"
@@ -84,6 +83,7 @@
           hide-details
         ></v-text-field>
       </v-toolbar>
+      <v-card-text class='ml-5' v-if="checkAlert"><h3> Total number of readings: {{payload.length}}</h3></v-card-text>
       <v-data-table
         :headers="headers"
         :search="search"

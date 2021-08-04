@@ -38,7 +38,7 @@ const mutations = {
         }
       }
       state.data = data.data.data
-      console.log(state.data)
+      return state.data
     })
   }
 }
