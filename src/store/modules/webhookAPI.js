@@ -10,6 +10,8 @@ const mutations = {
     routes.getData().then(data => {
       state.data = []
       state.payload = []
+      state.alertPayload = []
+      state.alertData = []
       console.log(data.data.data)
       for (var i in data.data.data) {
         if (data.data.data[i].event_type === 'alert') {
@@ -23,8 +25,8 @@ const mutations = {
           date = date.getHours() +
           ':' + date.getMinutes() +
           ':' + date.getSeconds() +
-          ' ' + date.getDate() +
-          '/' + (date.getMonth() + 1) +
+          ' ' + (date.getMonth() + 1) +
+          '/' + date.getDate() +
           '/' + date.getFullYear()
           var obj = {
             battery: data.data.data[i].event_data.payload[0].value,
@@ -62,6 +64,9 @@ const getters = {
   alertData: state => {
     return state.alertData
   }
+  // label: state => {
+  //   payload
+  // }
 }
 
 export default {
