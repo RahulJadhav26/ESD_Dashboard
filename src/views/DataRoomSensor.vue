@@ -1,12 +1,21 @@
 <template>
 <div>
   <h1 class="text-center" style="text-decoration:underline;">DASHBOARD</h1>
+  <div class="text-center">
+    <v-progress-circular
+      :size="70"
+      :width="7"
+      color="blue"
+      indeterminate
+      v-if="!showChart"
+    ></v-progress-circular>
+  </div>
   <v-card flat class="d-flex mx-5 justify-center">
-    <v-card  class="chartCard pa-2 mx-1" style="width:50%;">
-      <line-chart v-if="showChart" :chartData="lineChartData" :options="options" />
+    <v-card v-if="showChart" class="chartCard pa-2 mx-1" style="width:50%;">
+      <line-chart  :chartData="lineChartData" :options="options" />
     </v-card>
-    <v-card  class=" chartCard pa-2 mx-1" style="width:50%;">
-    <mix-chart v-if="showAlertChart"  :chartData="mixChartData" :options="mixChartoptions"/>
+    <v-card v-if="showAlertChart"  class=" chartCard pa-2 mx-1" style="width:50%;">
+    <mix-chart   :chartData="mixChartData" :options="mixChartoptions"/>
     </v-card>
   </v-card>
   <div>

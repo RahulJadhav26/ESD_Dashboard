@@ -3,11 +3,14 @@ const state = {
   data: [],
   alertData: [],
   payload: [],
-  alertPayload: []
+  alertPayload: [],
+  refresh: false
 }
 const mutations = {
   'INIT_DATA' (state) {
     routes.getData().then(data => {
+      console.log('Refreshed')
+      state.refresh = true
       state.data = []
       state.payload = []
       state.alertPayload = []
@@ -40,6 +43,7 @@ const mutations = {
         }
       }
       state.data = data.data.data
+      state.refresh = false
       return state.data
     })
   }
@@ -63,6 +67,9 @@ const getters = {
   },
   alertData: state => {
     return state.alertData
+  },
+  refresh: state => {
+    return state.refresh
   }
   // label: state => {
   //   payload

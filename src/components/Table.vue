@@ -84,10 +84,20 @@
         ></v-text-field>
       </v-toolbar>
       <v-card-text class='ml-5' v-if="checkAlert"><h3> Total number of readings: {{payload.length}}</h3></v-card-text>
+      <div class="text-center">
+        <v-progress-circular
+          :size="70"
+          :width="7"
+          color="blue"
+          indeterminate
+          v-if="refresh"
+        ></v-progress-circular>
+      </div>
       <v-data-table
         :headers="headers"
         :search="search"
         :items="payload"
+        v-if="!refresh"
       >
       </v-data-table>
     </v-card>
@@ -182,7 +192,8 @@ export default {
       data: 'data',
       payload: 'payload',
       alertPayload: 'alertPayload',
-      alertData: 'alertData'
+      alertData: 'alertData',
+      refresh: 'refresh'
     }),
     dateRangeText () {
       return this.dates.join(' ~ ')
