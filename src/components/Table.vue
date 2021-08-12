@@ -16,12 +16,14 @@
           >
             <template v-slot:activator="{ on, attrs }">
               <v-btn
-              class="mr-5 primary"
+               class="primary"
                 v-bind="attrs"
                 v-on="on"
+                style="margin-right:40px;"
               >
                 Download
               </v-btn>
+
             </template>
             <v-card>
                   <v-card-title>Select Range</v-card-title>

@@ -8,7 +8,7 @@
     width="70%"
     class="Card"
     >
-    <v-card-title>Site Locations</v-card-title>
+    <v-card-title>Sensor Locations</v-card-title>
       <v-simple-table
       class="mt-5 mb-5"
       >
@@ -18,6 +18,7 @@
               <th>
                 Sensor
               </th>
+              <th>battery</th>
               <th>Go to</th>
             </tr>
           </thead>
