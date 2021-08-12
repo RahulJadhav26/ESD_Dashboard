@@ -20,6 +20,12 @@
           <h1 class='text-center pt-5' style="font-size:4.5rem;">1</h1>
         </v-card-text>
       </v-card>
+       <v-card elevation="10" class='Card' style="width:300px; height:200px;">
+        <h3 class="text-center mt-5"> Site Locations</h3>
+        <v-card-text>
+          <h1 class='text-center pt-5' style="font-size:4.5rem;">1</h1>
+        </v-card-text>
+      </v-card>
     </v-card>
     <v-card flat
     class="d-flex justify-center"
@@ -28,7 +34,7 @@
     width="70%"
     class="Card"
     >
-    <v-card-title>{{data[0].company.name}} , {{data[0].company.address}}</v-card-title>
+    <v-card-title>Site Locations</v-card-title>
       <v-simple-table
       class="mt-5 mb-5"
       >
@@ -36,20 +42,18 @@
           <thead>
             <tr class="text-center">
               <th>
-                Sensor
-              </th>
-              <th >
-                Battery
+                Building Location
               </th>
               <th>Go to</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>{{data[0].device.thing_name}}</td>
-              <td><v-icon size="30">mdi-battery-plus</v-icon>{{data[data.length - 1 ].event_data.payload[0].value}}</td>
+              <td>{{data[0].company.name}} , {{data[0].company.address}}</td>
+              <!-- <td><v-icon size="30">mdi-battery-plus</v-icon>{{data[data.length - 1 ].event_data.payload[0].value}}</td> -->
               <td>
-                <v-btn href="/dataRoomSensor" icon ><v-icon size="30">mdi-arrow-right-circle-outline</v-icon></v-btn>
+                <!-- <v-btn @click="navigate(data[0].company.id)" icon ><v-icon size="30">mdi-arrow-right-circle-outline</v-icon></v-btn> -->
+                <router-link tag='button' :to="`/siteBuilding/${data[0].company.id}`"><button class="btn btn-primary"> Sensors</button></router-link>
               </td>
             </tr>
           </tbody>
@@ -77,7 +81,12 @@ export default {
   methods: {
     ...mapActions({
       getData: 'getData'
-    })
+    }),
+    navigate (id) {
+      alert(id)
+      alert('navigate')
+      this.$router.push({ path: '/siteBuilding', params: { id: id } })
+    }
   }
 }
 </script>
