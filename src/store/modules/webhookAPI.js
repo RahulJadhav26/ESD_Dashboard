@@ -32,11 +32,11 @@ const mutations = {
           '/' + date.getDate() +
           '/' + date.getFullYear()
           var obj = {
-            battery: data.data.data[i].event_data.payload[0].value,
-            internalTemp: data.data.data[i].event_data.payload[1].value * 9 / 5 + 32,
-            humidity: data.data.data[i].event_data.payload[2].value,
-            RSSI: data.data.data[i].event_data.payload[3].value,
-            SNR: data.data.data[i].event_data.payload[4].value,
+            battery: data.data.data[i].event_data.payload.filter(attr => (attr.name === 'Battery'))[0].value,
+            internalTemp: data.data.data[i].event_data.payload.filter(attr => (attr.name === 'Internal Temp'))[0].value * 9 / 5 + 32,
+            humidity: data.data.data[i].event_data.payload.filter(attr => (attr.name === 'Humidity'))[0].value,
+            RSSI: data.data.data[i].event_data.payload.filter(attr => (attr.name === 'RSSI'))[0].value,
+            SNR: data.data.data[i].event_data.payload.filter(attr => (attr.name === 'SNR'))[0].value,
             timestamp: date
           }
           state.payload.push(obj)

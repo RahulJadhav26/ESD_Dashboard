@@ -1,11 +1,11 @@
 <template>
-<div style="margin:40px;">
-    <v-card>
+<div style="margin:27px;">
+    <v-card
+    class="Card">
       <v-toolbar flat>
       <v-card-title>
-        <h2>{{data[0].device.thing_name}}</h2>
+        <h2 class="text">{{data[0].device.thing_name}}</h2>
       </v-card-title>
-      <v-spacer></v-spacer>
       <v-spacer></v-spacer>
       <v-card-actions>
         <v-row justify="center">
@@ -16,9 +16,10 @@
           >
             <template v-slot:activator="{ on, attrs }">
               <v-btn
-               class="primary"
+               color="primary"
                 v-bind="attrs"
                 v-on="on"
+                dark
                 style="margin-right:40px;"
               >
                 Download
@@ -28,7 +29,7 @@
             <v-card>
                   <v-card-title>Select Range</v-card-title>
                   <v-divider></v-divider>
-                  <v-card-text style="">
+                  <v-card-text >
                       <v-row >
                           <v-col
                             cols="12"
@@ -74,10 +75,11 @@
                 </v-card>
               </v-dialog>
             </v-row>
-        <v-btn class="primary" @click="DownloadAll()">Download All</v-btn>
-        <v-btn class="primary" @click="getData()">Refresh</v-btn>
+        <v-btn class="primary mt-3" @click="DownloadAll()">Download All</v-btn>
+        <v-btn class="primary mt-3" @click="getData()">Refresh</v-btn>
       </v-card-actions>
       <v-text-field
+      class="mt-3"
           v-model="search"
           append-icon="mdi-magnify"
           label="Search"
@@ -85,8 +87,7 @@
           hide-details
         ></v-text-field>
       </v-toolbar>
-      <v-card-text class='ml-5' v-if="checkAlert"><h3> Total number of readings: {{payload.length}}</h3></v-card-text>
-      <div class="text-center">
+      <div class=" text text-center">
         <v-progress-circular
           :size="70"
           :width="7"
@@ -95,7 +96,9 @@
           v-if="refresh"
         ></v-progress-circular>
       </div>
+      <v-card-text class='text' v-if="checkAlert">Total number of readings: {{payload.length}}</v-card-text>
       <v-data-table
+        class="text"
         :headers="headers"
         :search="search"
         :items="payload"
@@ -104,7 +107,8 @@
       </v-data-table>
     </v-card>
     <br>
-    <v-card>
+    <v-card
+    class="Card text">
       <v-card-title>
         <h1 class="mr-2">Alerts</h1>
         <!-- <p v-if="checkAlert">Threshold:{{alertData[0].event_data.triggerData.triggers[0].conditions[0].value}}</p> -->
@@ -117,8 +121,9 @@
           hide-details
         ></v-text-field>
       </v-card-title>
-      <v-card-text v-if="checkAlert">Threshold:{{alertData[0].event_data.triggerData.triggers[0].conditions[0].value}}</v-card-text>
+      <v-card-text class="text" v-if="checkAlert">Threshold:{{alertData[0].event_data.triggerData.triggers[0].conditions[0].value}}</v-card-text>
     <v-data-table
+        class="text"
         :headers="alertheaders"
         :search="alertsearch"
         :items="alertPayload"
@@ -271,3 +276,9 @@ export default {
   }
 }
 </script>
+<style scoped>
+.Card{
+border-radius: 1.7rem !important;
+border: 2px solid rgba(247,105,0,0.6);
+}
+</style>

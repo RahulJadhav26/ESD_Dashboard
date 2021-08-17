@@ -1,6 +1,6 @@
 <template>
 <div>
-  <h1 class="text-center" style="text-decoration:underline;">DASHBOARD</h1>
+  <h1 class="text-center text" style="text-decoration:underline;">DASHBOARD</h1>
   <div class="text-center">
     <v-progress-circular
       :size="70"
@@ -10,7 +10,7 @@
       v-if="!showChart"
     ></v-progress-circular>
   </div>
-  <v-card flat class="d-flex mx-5 justify-center">
+  <v-card flat class="d-flex mx-5 justify-center flatCard">
     <v-card v-if="showChart" class="chartCard pa-2 mx-1" style="width:50%;">
       <line-chart  :chartData="lineChartData" :options="options" />
     </v-card>
@@ -193,6 +193,6 @@ export default {
 <style scoped>
 .chartCard{
 border-radius: 1.7rem !important;
-border: 2px solid gray;
+border: 2px solid rgba(247,105,0,0.6);
 }
 </style>

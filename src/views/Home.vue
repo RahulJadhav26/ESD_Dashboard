@@ -1,55 +1,55 @@
 <template>
   <div class="about">
-    <h1 class="mb-5 text-center" style="text-decoration:underline;">ESD Monitoring</h1>
-    <v-card flat class="d-flex justify-space-around">
+    <h1 class="mb-5 text text-center" style="text-decoration:underline;">ESD Monitoring</h1>
+    <v-card flat class="d-flex justify-space-around flatCard">
        <v-card elevation="10" class='Card' style="width:300px; height:200px;">
-        <h4 class="text-center mt-5"> Total Number of Readings </h4>
+        <h4 class="text-center text mt-5"> Total Number of Readings </h4>
         <v-card-text>
-          <h1 class='text-center pt-5' style="font-size:4.5rem;">{{data.length}}</h1>
+          <h1 class='text-center text pt-5' style="font-size:4.5rem;">{{data.length}}</h1>
         </v-card-text>
       </v-card>
       <v-card elevation="10" class='Card shadow-lg' style="width:300px; height:200px;">
-        <h4 class="text-center mt-5"> Total Number of Alerts </h4>
+        <h4 class="text-center text mt-5"> Total Number of Alerts </h4>
         <v-card-text>
-          <h1 class='text-center pt-5' style="font-size:4.5rem;">{{alertData.length}}</h1>
+          <h1 class='text-center text pt-5' style="font-size:4.5rem;">{{alertData.length}}</h1>
         </v-card-text>
       </v-card>
        <v-card elevation="10" class='Card shadow-lg' style="width:300px; height:200px;">
-        <h4 class="text-center mt-5"> Total On Board Sensors </h4>
+        <h4 class="text-center text mt-5"> Total On Board Sensors </h4>
         <v-card-text>
-          <h1 class='text-center pt-5' style="font-size:4.5rem;">1</h1>
+          <h1 class='text-center text pt-5' style="font-size:4.5rem;">1</h1>
         </v-card-text>
       </v-card>
        <v-card elevation="10" class='Card' style="width:300px; height:200px;">
-        <h4 class="text-center mt-5"> Site Locations</h4>
+        <h4 class="text-center text mt-5"> Site Locations</h4>
         <v-card-text>
-          <h1 class='text-center pt-5' style="font-size:4.5rem;">1</h1>
+          <h1 class='text-center text pt-5' style="font-size:4.5rem;">1</h1>
         </v-card-text>
       </v-card>
     </v-card>
     <v-card flat
-    class="d-flex justify-center"
+    class="d-flex justify-center flatCard"
     style="margin-top:25px;">
     <v-card
     width="70%"
     class="Card"
     >
-    <v-card-title>Site Locations</v-card-title>
+    <v-card-title class="text">Site Locations</v-card-title>
       <v-simple-table
-      class="mt-5 mb-5"
+      class="mt-5 mb-5 flatCard"
       >
         <template v-slot:default>
           <thead>
             <tr class="text-center">
-              <th>
+              <th class="text">
                 Building Location
               </th>
-              <th>Go to</th>
+              <th class="text">Go to</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>{{data[0].company.name}} , {{data[0].company.address}}</td>
+              <td class="text">{{data[0].company.name}} , {{data[0].company.address}}</td>
               <!-- <td><v-icon size="30">mdi-battery-plus</v-icon>{{data[data.length - 1 ].event_data.payload[0].value}}</td> -->
               <td>
                 <!-- <v-btn @click="navigate(data[0].company.id)" icon ><v-icon size="30">mdi-arrow-right-circle-outline</v-icon></v-btn> -->
@@ -94,6 +94,7 @@ export default {
 <style scoped>
 .Card{
 border-radius: 1.7rem !important;
-border: 2px solid gray;
+border: 2px solid rgba(247,105,0,0.6);
+/* background: transparent !important; */
 }
 </style>
