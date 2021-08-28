@@ -6,6 +6,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    loggedIn: false
   },
   mutations: {
   },
@@ -13,5 +14,10 @@ export default new Vuex.Store({
   },
   modules: {
     webhookAPI
+  },
+  getters: {
+    loggedIn: state => {
+      return state.loggedIn
+    }
   }
 })

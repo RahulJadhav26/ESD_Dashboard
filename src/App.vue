@@ -7,9 +7,10 @@
       dark
       hide-on-scroll
     >
-        <v-toolbar-title class="font-weight-bold text-lg"><h1 class="text">CENT</h1></v-toolbar-title>
+        <v-toolbar-title class="font-weight-bold text-lg"><h1 class="text">CENT </h1></v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn class="text" text href="/">Home</v-btn>
+      <v-btn v-if="loggedIn" class="text" text href="/">Logout</v-btn>
     </v-app-bar>
     <v-main>
       <router-view/>
@@ -18,13 +19,34 @@
 </template>
 
 <script>
-
+import firebase from 'firebase'
+import { mapGetters } from 'vuex'
 export default {
   name: 'App',
-
+  computed: {
+    ...mapGetters({
+      loggedIn: 'loggedIn'
+    })
+  },
   data: () => ({
     //
-  })
+  }),
+  methods: {
+    logout () {
+      firebase
+        .auth()
+        .signOut()
+        .then(() => {
+          alert('Successfully logged out')
+          this.$store.state.loggedIn = false
+          this.$router.push('/')
+        })
+        .catch(error => {
+          alert(error.message)
+          this.$router.push('/login')
+        })
+    }
+  }
 }
 </script>
 <style>
