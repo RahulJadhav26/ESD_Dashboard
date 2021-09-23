@@ -128,9 +128,9 @@
         :search="alertsearch"
         :items="alertPayload"
       >
-      <template v-slot:item.timestamp= "{ item }">
+      <!-- <template v-slot:item.timestamp= "{ item }">
         <div>{{Date(item.timestamp)}}</div>
-      </template>
+      </template> -->
       </v-data-table>
     </v-card>
 </div>
@@ -153,11 +153,11 @@ export default {
     headers: [
       {
         text: 'Internal Temperature',
-        value: 'internalTemp'
+        value: 'Internal Temp'
       },
       {
         text: 'Humidity',
-        value: 'humidity'
+        value: 'Humidity'
       },
       {
         text: 'RSSI',
@@ -169,7 +169,7 @@ export default {
       },
       {
         text: ' Battery Level',
-        value: 'battery'
+        value: 'Battery'
       },
       {
         text: 'TimeStamp',
@@ -186,13 +186,13 @@ export default {
         value: 'value'
       },
       {
-        text: 'TimeStamp',
-        value: 'timestamp'
+        text: 'Date',
+        value: 'date'
       }
     ]
   }),
   created () {
-    this.getData()
+    this.getCollectionData(this.$route.params.name)
   },
   computed: {
     ...mapGetters({
@@ -279,6 +279,8 @@ export default {
 <style scoped>
 .Card{
 border-radius: 1.7rem !important;
-border: 2px solid rgba(247,105,0,0.6);
+/* border: 2px solid rgba(247,105,0,0.6); */
+border: 3px solid rgb(88, 86, 214, 0.6);
+/* background: rgb(229,229,234) !important; */
 }
 </style>

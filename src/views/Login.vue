@@ -37,18 +37,38 @@ export default {
   },
   methods: {
     login () {
-      firebase
-        .auth()
-        .signInWithEmailAndPassword(this.email, this.password)
+      firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
         .then(() => {
-          alert('Successfully logged in')
-          this.$store.state.loggedIn = true
+          // Existing and future Auth states are now persisted in the current
+          // session only. Closing the window would clear any existing state even
+          // if a user forgets to sign out.
+          // ...
+          // New sign-in will be persisted with session persistence.
+          return firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(() => {
+            alert('Successfully logged in')
+            this.$store.state.loggedIn = true
+            this.$session.set('username', this.email)
+            this.$store.state.sessionUser = this.$session.get('username')
+          })
         }).then(() => {
           this.$router.push('/')
         })
-        .catch(error => {
+        .catch((error) => {
+          // Handle Errors here.
           alert(error.message)
         })
+      // firebase
+      //   .auth()
+      //   .signInWithEmailAndPassword(this.email, this.password)
+      //   .then(() => {
+      //     alert('Successfully logged in')
+      //     this.$store.state.loggedIn = true
+      //   }).then(() => {
+      //     this.$router.push('/')
+      //   })
+      //   .catch(error => {
+      //     alert(error.message)
+      //   })
     }
   }
 }
