@@ -69,11 +69,22 @@ const mutations = {
         return true
       })
   },
+  'GET_ALL_DATA' (state, database) {
+    routes.getAllData(database).then(data => {
+      state.refresh = true
+      state.data = []
+      state.payload = []
+      state.alertPayload = []
+      state.alertData = []
+
+      state.data = data.data.data
+      state.alertData = data.data.alerts
+    })
+  },
   'GET_SENSOR_DATA' (state, collection) {
     var obj = {
       collection: collection
     }
-    console.log(obj)
     routes.getCollectionData(obj).then(data => {
       console.log('Refreshed')
       state.refresh = true
@@ -136,6 +147,9 @@ const mutations = {
 const actions = {
   getData: ({ commit }) => {
     commit('INIT_DATA')
+  },
+  getAllData: ({ commit }, database) => {
+    commit('GET_ALL_DATA', database)
   },
   getSensors: ({ commit }, obj) => {
     commit('GET_SENSOR', obj)

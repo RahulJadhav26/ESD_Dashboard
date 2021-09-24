@@ -10,7 +10,7 @@
     ></v-progress-circular>
     </div>
   <div
-  v-if="!checkData"
+   v-if="!checkData"
   class="about"
   >
     <h1 class="mb-5 text text-center" style="text-decoration:underline;">ESD Monitoring</h1>
@@ -30,7 +30,7 @@
        <v-card elevation="10" class='Card shadow-lg' style="width:300px; height:200px;">
         <h4 class="text-center text mt-5"> Total On Board Sensors </h4>
         <v-card-text>
-          <h1 class='text-center text pt-5' style="font-size:4.5rem;">1</h1>
+          <h1 class='text-center text pt-5' style="font-size:4.5rem;">{{sensors.length}}</h1>
         </v-card-text>
       </v-card>
        <v-card elevation="10" class='Card' style="width:300px; height:200px;">
@@ -62,7 +62,7 @@
           </thead>
           <tbody>
             <tr>
-              <td class="text">{{data[0].company.name}} , {{data[0].company.address}}</td>
+              <td class="text">{{data[data.length - 1].company.name}} , {{data[data.length - 1].company.address}}</td>
               <!-- <td><v-icon size="30">mdi-battery-plus</v-icon>{{data[data.length - 1 ].event_data.payload[0].value}}</td> -->
               <td>
                 <!-- <v-btn @click="navigate(data[0].company.id)" icon ><v-icon size="30">mdi-arrow-right-circle-outline</v-icon></v-btn> -->
@@ -87,7 +87,8 @@ export default {
   computed: {
     ...mapGetters({
       data: 'data',
-      alertData: 'alertData'
+      alertData: 'alertData',
+      sensors: 'sensors'
     }),
     checkData () {
       if (this.data.length === 0) {
@@ -99,14 +100,16 @@ export default {
     }
   },
   created () {
-    this.getData().then(() => {
-      console.log(this.data)
+    this.getAllData({ database: 'sensor-data' }).then(() => {
+      console.log('Refreshed v1')
     })
+    this.getSensors({ database: 'sensor-data' })
   },
   methods: {
     ...mapActions({
       getData: 'getData',
-      getSensors: 'getSensors'
+      getSensors: 'getSensors',
+      getAllData: 'getAllData'
     }),
     navigate (db) {
       // console.log(db)
