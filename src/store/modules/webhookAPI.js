@@ -6,7 +6,8 @@ const state = {
   alertPayload: [],
   refresh: false,
   sensors: [],
-  siteBuilding: ''
+  siteBuilding: '',
+  databases: []
 }
 const mutations = {
   'INIT_DATA' (state) {
@@ -68,6 +69,19 @@ const mutations = {
         state.refresh = false
         return true
       })
+  },
+  'GET_DATABASES' (state) {
+    console.log('database mutation')
+    routes.getDatabases().then(data => {
+      state.refresh = true
+      // var databases = []
+      for (var element in data.data.data) {
+        // console.log(data.data.data[element].name)
+        if (String(data.data.data[element].name) !== 'local' && String(data.data.data[element].name) !== 'admin') {
+          state.databases.push(data.data.data[element])
+        }
+      }
+    })
   },
   'GET_ALL_DATA' (state, database) {
     routes.getAllData(database).then(data => {
@@ -158,6 +172,10 @@ const actions = {
     console.log('Action getCollectionData')
     console.log(collection)
     commit('GET_SENSOR_DATA', collection)
+  },
+  getDatabases: ({ commit }) => {
+    console.log('Action getDatabases')
+    commit('GET_DATABASES')
   }
 
 }
@@ -182,6 +200,9 @@ const getters = {
   },
   siteBuilding: state => {
     return state.siteBuilding
+  },
+  databases: state => {
+    return state.databases
   }
 }
 

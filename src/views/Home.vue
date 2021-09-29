@@ -61,14 +61,15 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td class="text">{{data[data.length - 1].company.name}} , {{data[data.length - 1].company.address}}</td>
+            <tr v-for="i in databases" :key="databases.indexOf(i)">
+              <!-- <td class="text">{{data[data.length - 1].company.name}} , {{data[data.length - 1].company.address}}</td> -->
               <!-- <td><v-icon size="30">mdi-battery-plus</v-icon>{{data[data.length - 1 ].event_data.payload[0].value}}</td> -->
+              <td>{{i.name}}</td>
               <td>
                 <!-- <v-btn @click="navigate(data[0].company.id)" icon ><v-icon size="30">mdi-arrow-right-circle-outline</v-icon></v-btn> -->
                 <!-- <button href="/siteBuilding" @click="navigate()" class="btn btn-primary"> All Sensors</button> -->
                 <!-- <router-link tag='button' to="/siteBuilding" > -->
-                <button @click="navigate()" class="btn btn-primary"> All Sensors</button>
+                <button @click="navigate(i.name)" class="btn btn-primary"> All Sensors</button>
                 <!-- </router-link> -->
               </td>
             </tr>
@@ -88,7 +89,8 @@ export default {
     ...mapGetters({
       data: 'data',
       alertData: 'alertData',
-      sensors: 'sensors'
+      sensors: 'sensors',
+      databases: 'databases'
     }),
     checkData () {
       if (this.data.length === 0) {
@@ -104,17 +106,19 @@ export default {
       console.log('Refreshed v1')
     })
     this.getSensors({ database: 'sensor-data' })
+    this.getDatabases()
   },
   methods: {
     ...mapActions({
       getData: 'getData',
       getSensors: 'getSensors',
-      getAllData: 'getAllData'
+      getAllData: 'getAllData',
+      getDatabases: 'getDatabases'
     }),
     navigate (db) {
       // console.log(db)
       var obj = {
-        database: 'sensor-data'
+        database: db
       }
       this.$router.push({ name: 'siteBuilding', params: { name: obj.database } })
       // this.getSensors(obj)

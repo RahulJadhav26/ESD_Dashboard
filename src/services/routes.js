@@ -16,8 +16,11 @@ export default {
   getCollections (db) {
     return Api().post('/collection', db)
   },
+  getDatabases () {
+    console.log('api database')
+    return Api().get('/getDatabases')
+  },
   getAllData (db) {
-    console.log(db)
     return Api().post('/getAllData', db)
   }
 }
