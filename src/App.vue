@@ -6,12 +6,12 @@
       flat
       hide-on-scroll
     >
-     <v-img
+     <!-- <v-img
     class="mx-2 img-thumbnail rounded-lg"
     src="https://i2.wp.com/ourcity.syrgov.net/wp-content/uploads/2018/10/syracuse-logo-gold.gif?fit=1800%2C1800&ssl=1"
     max-height="50"
     max-width="50"
-  ></v-img>
+  ></v-img> -->
     <!-- {{sessionUser}} -->
         <v-toolbar-title class="font-weight-bold text-lg"><h3 class="text">CENT</h3></v-toolbar-title>
       <v-spacer></v-spacer>
