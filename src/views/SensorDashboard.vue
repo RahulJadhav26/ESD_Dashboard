@@ -173,7 +173,8 @@ export default {
   computed: {
     ...mapGetters({
       payload: 'payload',
-      alertPayload: 'alertPayload'
+      alertPayload: 'alertPayload',
+      siteBuilding: 'siteBuilding'
     }),
     linechartData: function () {
       return this.lineChartData
@@ -183,7 +184,8 @@ export default {
     }
   },
   created () {
-    this.getCollectionData(this.$route.params.name)
+    console.log(this.$route.query)
+    this.getCollectionData({ database: this.$route.query.database, collection: this.$route.query.sensor })
   },
   methods: {
     ...mapActions({

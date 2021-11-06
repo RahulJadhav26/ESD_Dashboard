@@ -76,7 +76,7 @@
               </v-dialog>
             </v-row>
         <v-btn class="primary mt-3" @click="DownloadAll()">Download All</v-btn>
-        <v-btn class="primary mt-3" @click="getData()">Refresh</v-btn>
+        <!-- <v-btn class="primary mt-3" @click="getAllData()">Refresh</v-btn> -->
       </v-card-actions>
       <v-text-field
       class="mt-3"
@@ -96,10 +96,10 @@
           v-if="refresh"
         ></v-progress-circular>
       </div>
-      <v-card-text class='text' v-if="checkAlert">Total number of readings: {{payload.length}}</v-card-text>
+      <v-card-text class='text' v-if="checkData">Total number of readings: {{payload.length}}</v-card-text>
       <v-data-table
         class="text"
-        :headers="headers"
+        :headers="payloadHeaders"
         :search="search"
         :items="payload"
         v-if="!refresh"
@@ -150,32 +150,7 @@ export default {
     dates: [],
     alertsearch: '',
     date: new Date(),
-    headers: [
-      {
-        text: 'Internal Temperature',
-        value: 'Internal Temp'
-      },
-      {
-        text: 'Humidity',
-        value: 'Humidity'
-      },
-      {
-        text: 'RSSI',
-        value: 'RSSI'
-      },
-      {
-        text: 'SNR',
-        value: 'SNR'
-      },
-      {
-        text: ' Battery Level',
-        value: 'Battery'
-      },
-      {
-        text: 'TimeStamp',
-        value: 'timestamp'
-      }
-    ],
+    headers: [],
     alertheaders: [
       {
         text: ' Alert Type',
@@ -192,7 +167,9 @@ export default {
     ]
   }),
   created () {
-    this.getCollectionData(this.$route.params.name)
+    this.getCollectionData({ database: this.siteBuilding, collection: this.$route.params.name }).then(() => {
+      this.headers = this.payloadHeaders
+    })
   },
   computed: {
     ...mapGetters({
@@ -200,10 +177,18 @@ export default {
       payload: 'payload',
       alertPayload: 'alertPayload',
       alertData: 'alertData',
-      refresh: 'refresh'
+      refresh: 'refresh',
+      payloadHeaders: 'payloadHeaders'
     }),
     dateRangeText () {
       return this.dates.join(' ~ ')
+    },
+    checkData () {
+      if (this.data.length === 0) {
+        return false
+      } else {
+        return true
+      }
     },
     checkAlert () {
       if (this.alertData.length === 0) {
@@ -215,17 +200,17 @@ export default {
   },
   methods: {
     ...mapActions({
-      getData: 'getData'
+      // getData: 'getData',
+      getAllData: 'getAllData'
     }),
     DownloadAll () {
-      this.getData().then(() => {
-        var uplink = this.$store.state.webhookAPI.payload
-        const result = XLSX.utils.json_to_sheet(uplink)
-        console.log(result)
-        const wb = XLSX.utils.book_new()
-        XLSX.utils.book_append_sheet(wb, result, 'data')
-        XLSX.writeFile(wb, 'Download.xlsx')
-      })
+      var uplink = this.payload
+      console.log(this.payload)
+      const result = XLSX.utils.json_to_sheet(uplink)
+      console.log(result)
+      const wb = XLSX.utils.book_new()
+      XLSX.utils.book_append_sheet(wb, result, 'data')
+      XLSX.writeFile(wb, 'Download.xlsx')
     },
     Download () {
       var array = []
@@ -255,23 +240,23 @@ export default {
           '/' + (date.getMonth() + 1) +
           '/' + date.getFullYear()
           var obj = {
-            battery: data.data.data[i].event_data.payload[0].value,
-            internalTemp: data.data.data[i].event_data.payload[1].value * 9 / 5 + 32,
-            humidity: data.data.data[i].event_data.payload[2].value,
-            RSSI: data.data.data[i].event_data.payload[3].value,
-            SNR: data.data.data[i].event_data.payload[4].value,
-            timestamp: date
+
           }
+          data.data.data[i].event_data.payload.forEach(element => {
+            obj[element.name] = element.value
+            obj.timestamp = date
+          })
           payload.push(obj)
         }
-        console.log(payload)
-      }).then(() => {
-        const result = XLSX.utils.json_to_sheet(payload)
-        console.log(result)
-        const wb = XLSX.utils.book_new()
-        XLSX.utils.book_append_sheet(wb, result, 'data')
-        XLSX.writeFile(wb, 'Download.xlsx')
+        // console.log(payload)
       })
+        .then(() => {
+          const result = XLSX.utils.json_to_sheet(payload)
+          console.log(result)
+          const wb = XLSX.utils.book_new()
+          XLSX.utils.book_append_sheet(wb, result, 'data')
+          XLSX.writeFile(wb, 'Download.xlsx')
+        })
     }
   }
 }

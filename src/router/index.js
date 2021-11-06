@@ -4,6 +4,8 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import DataRoomSensor from '../views/DataRoomSensor.vue'
 import siteBuilding from '../components/siteBuilding'
+import AddSensor from '../views/AddSensor.vue'
+import AddSiteBuilding from '../views/AddSiteBuilding.vue'
 import collection from '../views/SensorDashboard'
 import Login from '../views/Login'
 import ForgotPass from '../views/ForgotPass.vue'
@@ -41,6 +43,16 @@ const routes = [
     path: '/collection/:name',
     name: 'collection',
     component: collection
+  },
+  {
+    path: '/addSensor',
+    name: 'addSensor',
+    component: AddSensor
+  },
+  {
+    path: '/addSiteBuilding',
+    name: 'addSiteBuilding',
+    component: AddSiteBuilding
   },
   {
     path: '/dataRoomSensor',

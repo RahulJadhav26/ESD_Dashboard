@@ -1,7 +1,7 @@
 <template>
   <div>
-
       <div class="text-center">
+        <!-- {{refresh}} -->
         <v-progress-circular
         :size="70"
         :width="7"
@@ -10,8 +10,24 @@
         v-if="refresh"
         ></v-progress-circular>
       </div>
-      <div v-if="!refresh">
-        <h1 style="text-decoration:underline;" class="text-center text">Site Building : {{this.$route.params.name}}</h1>
+      <div  v-if="!refresh" >
+        <h1 style="text-decoration:underline;" class="text-center text">Site Location : {{this.$route.params.name}}</h1>
+      <v-card flat class="d-flex justify-space-around flatCard">
+        <v-card elevation="10" class='Card' style="width:300px; height:200px;">
+        <h4 class="text-center text mt-5"> Total Number of Readings </h4>
+        <v-card-text>
+          <h1 class='text-center text pt-5' style="font-size:4.5rem;">{{data.length}}</h1>
+          <!-- <h1 class='text-center text pt-5' style="font-size:4.5rem;">0</h1> -->
+        </v-card-text>
+      </v-card>
+      <v-card elevation="10" class='Card shadow-lg' style="width:300px; height:200px;">
+        <h4 class="text-center text mt-5"> Total Number of Alerts </h4>
+        <v-card-text>
+          <h1 class='text-center text pt-5' style="font-size:4.5rem;">{{alertData.length}}</h1>
+          <!-- <h1 class='text-center text pt-5' style="font-size:4.5rem;">0</h1> -->
+        </v-card-text>
+      </v-card>
+      </v-card>
       <v-card flat
         class="d-flex justify-center flatCard"
         style="margin-top:25px;">
@@ -38,7 +54,8 @@
               <td class="text">{{i}} </td>
               <!-- <td class="text"><v-icon class="text" size="30">mdi-battery-plus</v-icon>{{data[data.length - 1 ].event_data.payload[0].value}}</td> -->
               <td class="text">
-                <v-btn :href="'/collection/'+ i" icon ><v-icon class="text" size="30">mdi-arrow-right-circle-outline</v-icon></v-btn>
+                <!-- <v-btn :href="'/collection/'+ i" icon ><v-icon class="text" size="30">mdi-arrow-right-circle-outline</v-icon></v-btn> -->
+                <v-btn @click="Goto(i)" icon ><v-icon class="text" size="30">mdi-arrow-right-circle-outline</v-icon></v-btn>
               </td>
             </tr>
           </tbody>
@@ -56,7 +73,13 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
   data () {
     return {
-      id: ''
+      id: '',
+      loading: false
+    }
+  },
+  watch: {
+    sensors: function (newVal, oldVal) {
+      this.sensors = newVal
     }
   },
   computed: {
@@ -69,20 +92,25 @@ export default {
     })
   },
   created () {
-    this.refresh = true
-    console.log('called')
+    console.log(this.loading)
     var obj = {
       database: this.$route.params.name
     }
-    this.getSensors(obj).then(() => {
-      console.log('sensors fetched')
-    })
+    this.getAllData({ database: this.$route.params.name })
+    this.getSensors(obj)
   },
   methods: {
     ...mapActions({
-      getData: 'getData',
-      getSensors: 'getSensors'
-    })
+      getSensors: 'getSensors',
+      getAllData: 'getAllData'
+    }),
+    Goto (sensor) {
+      var obj = {
+        sensor: sensor,
+        database: this.siteBuilding
+      }
+      this.$router.push({ name: 'collection', query: obj })
+    }
   }
 }
 </script>
