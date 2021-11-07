@@ -12,7 +12,7 @@
   <div
   class="about"
   >
-    <h1 class="mb-5 text text-center" style="text-decoration:underline;">ESD Monitoring</h1>
+    <h1 class="mb-5 text text-center" style="text-decoration:underline;">ESD- Test Monitoring</h1>
     <v-card flat class="d-flex justify-space-around flatCard">
        <v-card elevation="10" class='Card shadow-lg' style="width:300px; height:200px;">
         <h4 class="text-center text mt-5"> Total Active Sensors </h4>
