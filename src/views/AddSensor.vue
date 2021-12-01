@@ -1,6 +1,6 @@
 <template>
   <div>
-      <h1 class="text-center">Add/Edit Sensors</h1>
+      <h1 class="text-center"> Move Sensors</h1>
       <div v-if="message">
       <v-alert class="m-5" v-if="message.status" type="success">{{message.msg}}</v-alert>
       <v-alert class="m-5" v-if="!message.status" type="error">{{message.msg}}</v-alert>
@@ -11,64 +11,70 @@
       </div>
       <div class="container">
         <v-card flat class="flatCard container">
-          <v-row>
-            <v-col>
-                <h5 class="pt-3">Select Your Sensor :</h5>
-            </v-col>
-            <v-col>
-              <v-select
-                :items='allSensorCollection'
-                filled
-                rounded
-                label="Select your Sensor"
-                dense
-                v-model="payload.sensor"
-              ></v-select>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col >
-                <h5 class="pt-3">Current Location :</h5>
-            </v-col>
-            <v-col>
-              <v-text-field
-                :label="sensorBuilding.name"
-                filled
-                rounded
-                dense
-                disabled
-                v-model= "payload.source.name"
-              ></v-text-field>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col>
-                <h5 class="pt-3">Target Building :</h5>
-            </v-col>
-            <v-col>
-              <v-select
-                :items="allBuildings"
-                item-text="name"
-                return-object
-                filled
-                rounded
-                label="Select your Destination"
-                dense
-                v-model="payload.destination"
-              ></v-select>
-            </v-col>
-          </v-row>
-          <div class="text-center">
-              <v-btn
-                color="primary"
-                class="m-5"
-                x-large
-                style="width:50%;"
-                @click="edit(payload)"
-              >
-                Submit
-              </v-btn>
-          </div>
+          <v-card flat class="flatCard container">
+            <v-card  class="Card">
+                <v-col>
+                    <h5 class="pt-3">Select Your Sensor :</h5>
+                </v-col>
+                <v-col>
+                  <v-select
+                    :items='allSensorCollection'
+                    filled
+                    rounded
+                    label="Select your Sensor"
+                    dense
+                    v-model="payload.sensor"
+                  ></v-select>
+                </v-col>
+                <v-col >
+                    <h5 class="pt-3">Current Location :</h5>
+                </v-col>
+                <v-col>
+                  <v-text-field
+                    :label="sensorBuilding.name"
+                    filled
+                    rounded
+                    dense
+                    disabled
+                    v-model= "payload.source.name"
+                  ></v-text-field>
+                </v-col>
+                <div class="ml-5">
+                  <v-checkbox
+                    v-model="move"
+                    label="Do you want to move the Sensor location"
+                  ></v-checkbox>
+                </div>
+                <div v-if="move">
+                    <v-col>
+                        <h5 class="pt-3">Target Building :</h5>
+                    </v-col>
+                    <v-col>
+                      <v-select
+                        :items="allBuildings"
+                        item-text="name"
+                        return-object
+                        filled
+                        rounded
+                        label="Select your Destination"
+                        dense
+                        v-model="payload.destination"
+                      ></v-select>
+                    </v-col>
+                      <div class="text-center">
+                      <v-btn
+                        color="primary"
+                        class="m-5"
+                        x-large
+                        style="width:50%;"
+                        @click="edit(payload)"
+                      >
+                        Submit
+                      </v-btn>
+                  </div>
+                </div>
+            </v-card>
+          </v-card>
         </v-card>
       </div>
   </div>
@@ -84,6 +90,7 @@ export default {
         source: '',
         destination: ''
       },
+      move: false,
       message: null
     }
   },
@@ -129,6 +136,14 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+.Card{
+border-radius: 1.7rem !important;
+padding: 5px;
+/* border: 2px solid rgba(247,105,0,0.6); */
+/* border: 3px solid rgb(88, 86, 214, 0.6); */
+border: 3px solid rgb(88, 86, 214, 0.6);
+/* background: rgb(229,229,234) !important; */
+/* background: transparent  !important;; */
+}
 </style>

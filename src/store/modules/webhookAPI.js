@@ -58,10 +58,10 @@ const mutations = {
     routes.getAllData(database).then(data => {
       state.data = data.data.data
       state.alertData = data.data.alerts
-      console.log(state.data)
-      console.log(state.alertData)
+      // console.log(state.data)
+      // console.log(state.alertData)
     }).then(() => {
-      console.log(state.data.length)
+      // console.log(state.data.length)
       if (state.data.length !== 0) {
         state.refresh = false
       }
@@ -110,28 +110,31 @@ const mutations = {
       console.log('Refreshed')
       state.refresh = true
       state.data = []
+      state.alertData = []
       state.payload = []
       state.alertPayload = []
-      state.alertData = []
       state.payloadHeaders = []
       state.sensorBuilding = []
       var headers = {}
-      console.log(data.data.data)
-      data.data.data[0].event_data.payload.forEach(element => {
-        headers = {
-          text: element.name,
-          value: element.name
-        }
-        state.payloadHeaders.push(headers)
-      })
-      state.payloadHeaders.push({ text: 'Timestamp', value: 'timestamp' })
-      for (var i in data.data.data) {
-        if (data.data.data[i].event_type === 'alert') {
-          // console.log(data.data.data[i].event_type)
-          data.data.data[i].customPayload = data.data.data[i].event_data
-          state.alertData.push(data.data.data[i])
-          var date1 = new Date(Number(data.data.data[i].event_data.timestamp))
-          console.log(date1)
+
+      if (Object.prototype.hasOwnProperty.call(data.data.data[0].event_data, 'payload')) {
+        data.data.data[0].event_data.payload.forEach(element => {
+          headers = {
+            text: element.name,
+            value: element.name
+          }
+          state.payloadHeaders.push(headers)
+        })
+        state.payloadHeaders.push({ text: 'Timestamp', value: 'timestamp' })
+        console.log(state.payloadHeaders)
+      }
+
+      for (var i in data.data.alerts) {
+        console.log(data.data.alerts[i])
+        data.data.alerts[i].customPayload = data.data.alerts[i].event_data
+        console.log(data.data.alerts[i])
+        if (Object.prototype.hasOwnProperty.call(data.data.alerts[i].event_data, 'timestamp')) {
+          var date1 = new Date(Number(data.data.alerts[i].event_data.timestamp))
           date1 = 'TIME: ' + date1.getHours() +
           ':' + date1.getMinutes() +
           ':' + date1.getSeconds() +
@@ -139,26 +142,31 @@ const mutations = {
           '/' + date1.getDate() +
           '/' + date1.getFullYear()
           console.log(date1)
-          data.data.data[i].customPayload.date = date1
-          state.alertPayload.push(data.data.data[i].customPayload)
+          data.data.alerts[i].customPayload.date = date1
+          state.alertPayload.push(data.data.alerts[i].customPayload)
+          state.alertData = data.data.alerts
           console.log(state.alertPayload)
-        } else {
-          var date = new Date(data.data.data[i].event_data.payload[0].timestamp)
+        }
+      }
+      for (var j in data.data.data) {
+        if (Object.prototype.hasOwnProperty.call(data.data.data[j].event_data, 'timestamp')) {
+          var date = new Date(data.data.data[j].event_data.payload[0].timestamp)
           date = date.getHours() +
           ':' + date.getMinutes() +
           ':' + date.getSeconds() +
           ' DATE: ' + (date.getMonth() + 1) +
           '/' + date.getDate() +
           '/' + date.getFullYear()
-          var obj = {}
-          data.data.data[i].event_data.payload.forEach(element => {
-            obj[element.name] = element.value
-            obj.timestamp = date
-          })
-          state.payload.push(obj)
         }
+        var obj = {}
+        data.data.data[j].event_data.payload.forEach(element => {
+          obj[element.name] = element.value
+          obj.timestamp = date
+        })
+        state.payload.push(obj)
+        state.data = data.data.data
       }
-      state.data = data.data.data
+      console.log(state.payload)
       state.refresh = false
       return state.data
     })

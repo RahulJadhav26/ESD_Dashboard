@@ -12,7 +12,7 @@
   <div
   class="about"
   >
-    <h1 class="mb-5 text text-center" style="text-decoration:underline;">ESD- Test Monitoring</h1>
+    <h1 class="mb-5 text text-center">ESD Monitoring</h1>
     <v-card flat class="d-flex justify-space-around flatCard">
        <v-card elevation="10" class='Card shadow-lg' style="width:300px; height:200px;">
         <h4 class="text-center text mt-5"> Total Active Sensors </h4>
@@ -36,24 +36,23 @@
     >
     <v-card-title class="text">Site Locations</v-card-title>
       <v-simple-table
-      class="mt-5 mb-5 flatCard"
       >
         <template v-slot:default>
           <thead>
-            <tr class="text-center">
+            <tr>
               <th class="text">
                 Building Location
               </th>
-              <th class="text float-right mr-5">Go to</th>
+              <th class="text">Go to</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="i in buildings" :key="buildings.indexOf(i)">
-              <td>{{i}}</td>
-              <td class="float-right mr-5">
-                <button @click="navigate(i)" class="btn btn-primary"> All Sensors</button>
-              </td>
-            </tr>
+              <tr  @click="navigate(i)" v-for="i in buildings" :key="buildings.indexOf(i)">
+                <td class="text">{{i}}</td>
+                <td>
+                  <v-btn color="indigo darken-4" icon ><v-icon>mdi-arrow-right-circle-outline</v-icon></v-btn>
+                </td>
+              </tr>
           </tbody>
         </template>
       </v-simple-table>
@@ -108,8 +107,17 @@ export default {
 <style scoped>
 .Card{
 border-radius: 1.7rem !important;
+padding: 5px;
 /* border: 2px solid rgba(247,105,0,0.6); */
+/* border: 3px solid rgb(88, 86, 214, 0.6); */
 border: 3px solid rgb(88, 86, 214, 0.6);
 /* background: rgb(229,229,234) !important; */
+/* background: transparent  !important;; */
+}
+/* tr:hover{
+  box-shadow: 0px 1px 5px;
+} */
+.text{
+  color:rgba(0,14,84);
 }
 </style>

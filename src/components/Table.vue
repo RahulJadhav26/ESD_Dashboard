@@ -104,6 +104,9 @@
         :items="payload"
         v-if="!refresh"
       >
+      <!-- <template v-slot:header="{ header }">
+      <h1> {{ "hello" + header.text}} </h1>
+    </template> -->
       </v-data-table>
     </v-card>
     <br>
@@ -121,7 +124,7 @@
           hide-details
         ></v-text-field>
       </v-card-title>
-      <v-card-text class="text" v-if="checkAlert">Threshold:{{alertData[0].event_data.triggerData.triggers[0].conditions[0].value}}</v-card-text>
+      <!-- <v-card-text class="text" v-if="checkAlert">Threshold:{{alertData[0].event_data.triggerData.triggers[0].conditions[0].value}}</v-card-text> -->
     <v-data-table
         class="text"
         :headers="alertheaders"
@@ -166,11 +169,11 @@ export default {
       }
     ]
   }),
-  created () {
-    this.getCollectionData({ database: this.siteBuilding, collection: this.$route.params.name }).then(() => {
-      this.headers = this.payloadHeaders
-    })
-  },
+  // created () {
+  //   this.getCollectionData({ database: this.siteBuilding, collection: this.$route.params.name }).then(() => {
+  //     this.headers = this.payloadHeaders
+  //   })
+  // },
   computed: {
     ...mapGetters({
       data: 'data',

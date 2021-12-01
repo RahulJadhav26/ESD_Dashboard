@@ -36,7 +36,7 @@
       >
         <v-list-item-group
           v-model="group"
-          active-class="deep-purple--text text--accent-4"
+          active-class="lime lighten-3"
         >
         <br>
           <v-list-item href="/">
@@ -114,7 +114,12 @@ export default {
 </script>
 <style>
 #app{
-  background: rgb(242,242,247) !important;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  /* background: #FFEEEE;  fallback for old browsers */
+  background: -webkit-linear-gradient(to left, #DDEFBB, #FFEEEE);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to left, #DDEFBB, #FFEEEE); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+  /* background: rgb(242,242,247) !important; */
   /* background: linear-gradient(180deg, rgba(255,255,255) 30%, rgba(247,105,0,0.9) 100%) !important; */
   /* BLUE rgba(0,14,84,0.8) */
   /* ORANGE rgba(247,105,0,0.9) */

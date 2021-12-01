@@ -1,18 +1,19 @@
 <template>
   <div>
-      <div class="text-center">
+      <div v-if="refresh" class="text-center">
         <!-- {{refresh}} -->
+       <h3> Please Wait Loading... </h3>
+       <br>
         <v-progress-circular
         :size="70"
         :width="7"
-        color="blue"
+        color="indigo darken-4"
         indeterminate
-        v-if="refresh"
         ></v-progress-circular>
       </div>
       <div  v-if="!refresh" >
-        <h1 style="text-decoration:underline;" class="text-center text">Site Location : {{this.$route.params.name}}</h1>
-      <v-card flat class="d-flex justify-space-around flatCard">
+        <h1 class="text-center text">{{this.$route.params.name}}</h1>
+      <v-card flat style="padding-top:50px;" class="d-flex justify-space-around flatCard">
         <v-card elevation="10" class='Card' style="width:300px; height:200px;">
         <h4 class="text-center text mt-5"> Total Number of Readings </h4>
         <v-card-text>
@@ -50,12 +51,12 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="i in sensors" :key="sensors.indexOf(i)">
+            <tr @click="Goto(i)" v-for="i in sensors" :key="sensors.indexOf(i)">
               <td class="text">{{i}} </td>
               <!-- <td class="text"><v-icon class="text" size="30">mdi-battery-plus</v-icon>{{data[data.length - 1 ].event_data.payload[0].value}}</td> -->
               <td class="text">
                 <!-- <v-btn :href="'/collection/'+ i" icon ><v-icon class="text" size="30">mdi-arrow-right-circle-outline</v-icon></v-btn> -->
-                <v-btn @click="Goto(i)" icon ><v-icon class="text" size="30">mdi-arrow-right-circle-outline</v-icon></v-btn>
+                <v-btn icon ><v-icon class="text" size="30">mdi-arrow-right-circle-outline</v-icon></v-btn>
               </td>
             </tr>
           </tbody>
@@ -119,4 +120,5 @@ export default {
 border-radius: 1.7rem !important;
 border: 3px solid rgb(88, 86, 214, 0.6);
 }
+
 </style>

@@ -1,26 +1,29 @@
 <template>
   <div>
-      <h1 class="text-center text" style="text-decoration:underline;">DASHBOARD</h1>
-    <div class="text-center">
+    <div v-if="!showChart" class="text-center">
+        <h3> Please Wait Loading... </h3>
+        <br>
         <v-progress-circular
         :size="70"
         :width="7"
-        color="blue"
+        color="indigo darken-4"
         indeterminate
-        v-if="!showChart"
         ></v-progress-circular>
     </div>
-    <v-card flat class="d-flex justify-center mx-2 flatCard">
-       <v-card v-if="showChart" class="chartCard mx-1 pa-2" style="width:50%;">
-          <line-chart :chartData="lineChartData" :options="options" />
-      </v-card>
-        <v-card v-if="showAlertChart"  class=" chartCard mx-1 pa-2" style="width:50%;">
-        <mix-chart   :chartData="mixChartData" :options="mixChartoptions"/>
+    <div v-if="showChart">
+      <h1 class="text-center text" style="text-decoration:underline;">DASHBOARD</h1>
+      <v-card flat class="d-flex justify-center mx-2 flatCard">
+        <v-card v-if="showChart" class="chartCard mx-1 pa-2" style="width:50%;">
+            <line-chart :chartData="lineChartData" :options="options" />
         </v-card>
-    </v-card>
-      <div>
-        <Table/>
-      </div>
+          <v-card v-if="showAlertChart"  class=" chartCard mx-1 pa-2" style="width:50%;">
+          <mix-chart   :chartData="mixChartData" :options="mixChartoptions"/>
+          </v-card>
+      </v-card>
+        <div>
+          <Table/>
+        </div>
+    </div>
   </div>
 </template>
 
@@ -42,8 +45,8 @@ export default {
       payloadHumidity: [],
       showChart: false,
       alertLabels: [],
+      alertChartData: [],
       alertThreshold: [],
-      alertData: [],
       showAlertChart: false,
       lineChartData: {},
       options: {
@@ -101,8 +104,13 @@ export default {
       this.showChart = false
       for (var i = 0; i < 5; i++) {
         this.payloadLabels.push(this.payload[i].timestamp)
-        this.payloadInternalTemp.push(this.payload[i]['Internal Temp'])
         this.payloadHumidity.push(this.payload[i].Humidity)
+        for (var property in this.payload[i]) {
+          if (Object.prototype.hasOwnProperty.call(this.payload[i], property) && property.toString().toLowerCase().includes('temp')) {
+            this.payloadInternalTemp.push(this.payload[i][property])
+            console.log(this.payloadInternalTemp)
+          }
+        }
       }
       this.lineChartData = {
         labels: this.payloadLabels.reverse(),
@@ -132,11 +140,11 @@ export default {
     alertPayload: function (newVal, oldVal) {
       this.alertLabels = []
       this.alertThreshold = []
-      this.alertData = []
+      this.alertChartData = []
       this.showAlertChart = false
       console.log(newVal)
       for (var i in newVal.slice(-5)) {
-        this.alertData.push(newVal[i].value)
+        this.alertChartData.push(newVal[i].value)
         var date = new Date(Number(newVal[i].timestamp))
         date = date.getHours() +
           ':' + date.getMinutes() +
@@ -154,7 +162,7 @@ export default {
           borderWidth: 2,
           borderColor: 'rgba(75, 192, 192)',
           backgroundColor: 'rgba(75, 192, 192, 0.2)',
-          data: this.alertData.reverse()
+          data: this.alertChartData.reverse()
         },
         {
           type: 'line',
@@ -174,7 +182,8 @@ export default {
     ...mapGetters({
       payload: 'payload',
       alertPayload: 'alertPayload',
-      siteBuilding: 'siteBuilding'
+      siteBuilding: 'siteBuilding',
+      alertData: 'alertData'
     }),
     linechartData: function () {
       return this.lineChartData
