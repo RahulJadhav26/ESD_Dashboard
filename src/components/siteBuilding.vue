@@ -93,11 +93,16 @@ export default {
     })
   },
   created () {
-    console.log(this.loading)
     var obj = {
       database: this.$route.params.name
     }
+    // Get all the Data and alerts for the specific building using
+    // the params(Building Name) passed and stores the data in state.data
+    // and alert data in state.alertData
     this.getAllData({ database: this.$route.params.name })
+    // Gets all the sensor names from the specific building which is passed as obj and
+    // store all the sensor names in state.sensors
+    // Declares state.sitebuilding as the current building name
     this.getSensors(obj)
   },
   methods: {
@@ -105,6 +110,7 @@ export default {
       getSensors: 'getSensors',
       getAllData: 'getAllData'
     }),
+    // Directs to sensorDashboard page with sensor and sitebuilding as the parameters
     Goto (sensor) {
       var obj = {
         sensor: sensor,

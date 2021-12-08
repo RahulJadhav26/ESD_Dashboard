@@ -194,6 +194,8 @@ export default {
   },
   created () {
     console.log(this.$route.query)
+    // Fetches the desired sensor data and alerts and stores the custom payload in state.alertPayload and state.payload
+    // Lastly it stores the raw data in state.alertDate and state.data
     this.getCollectionData({ database: this.$route.query.database, collection: this.$route.query.sensor })
   },
   methods: {

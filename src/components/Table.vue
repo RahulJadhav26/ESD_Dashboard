@@ -67,6 +67,7 @@
                     <v-btn
                       color="blue darken-1"
                       text
+                      disabled
                       @click="dialog = false; Download()"
                     >
                       Download
@@ -75,7 +76,7 @@
                 </v-card>
               </v-dialog>
             </v-row>
-        <v-btn class="primary mt-3" @click="DownloadAll()">Download All</v-btn>
+        <v-btn class="primary mt-3" disabled @click="DownloadAll()">Download All</v-btn>
         <!-- <v-btn class="primary mt-3" @click="getAllData()">Refresh</v-btn> -->
       </v-card-actions>
       <v-text-field

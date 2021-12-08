@@ -81,7 +81,9 @@ export default {
     })
   },
   created () {
+    // Get All Sensors for getting the count of all active sensors and stored in state.allsensors
     this.getAllSensors()
+    // Get all buildings to display the list of buildings on the page and stored in state.buildings
     this.getBuildings()
   },
   methods: {
@@ -91,6 +93,7 @@ export default {
       getAllSensors: 'getAllSensors',
       getBuildings: 'getBuildings'
     }),
+    // On Button click it navigates to /siteBuilding passing the building name as the param
     navigate (db) {
       console.log(db)
       var obj = {

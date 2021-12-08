@@ -5,10 +5,6 @@
       <v-alert class="m-5" v-if="message.status" type="success">{{message.msg}}</v-alert>
       <v-alert class="m-5" v-if="!message.status" type="error">{{message.msg}}</v-alert>
       </div>
-      <div v-if="feedbackMessage">
-        <v-alert class="m-5" v-if="feedbackMessage.status" type="success">{{feedbackMessage.msg}}</v-alert>
-        <v-alert class="m-5" v-if="!feedbackMessage.status" type="error">{{feedbackMessage.msg}}</v-alert>
-      </div>
       <div class="container">
         <v-card flat class="flatCard container">
           <v-card flat class="flatCard container">
@@ -36,7 +32,16 @@
                     rounded
                     dense
                     disabled
+                    v-if="payload.source"
                     v-model= "payload.source.name"
+                  ></v-text-field>
+                  <v-text-field
+                    label="Alloted to No Building"
+                    filled
+                    dense
+                    disabled
+                    v-model= "payload.source"
+                    v-if="!payload.source"
                   ></v-text-field>
                 </v-col>
                 <div class="ml-5">
@@ -62,9 +67,13 @@
                       ></v-select>
                     </v-col>
                       <div class="text-center">
+                        <div v-if="feedbackMessage">
+                          <v-alert class="m-" v-if="feedbackMessage.status" type="success">{{feedbackMessage.msg}}</v-alert>
+                          <v-alert class="m-" v-if="!feedbackMessage.status" type="error">{{feedbackMessage.msg}}</v-alert>
+                        </div>
                       <v-btn
                         color="primary"
-                        class="m-5"
+                        class="mb-3"
                         x-large
                         style="width:50%;"
                         @click="edit(payload)"
@@ -109,7 +118,11 @@ export default {
       this.findBuilding(obj)
     },
     sensorBuilding: function (newVal, oldVal) {
-      this.payload.source = this.sensorBuilding
+      if (this.sensorBuilding) {
+        this.payload.source = this.sensorBuilding
+      } else {
+        this.payload.source = ''
+      }
     }
   },
   methods: {
@@ -120,7 +133,7 @@ export default {
       editSensor: 'editSensor'
     }),
     edit (payload) {
-      if (payload.sensor === '' || payload.source === '' || payload.destination === '') {
+      if (payload.sensor === '' || payload.destination === '') {
         this.message = { status: false, msg: 'Please Select the sensor and a Target Building' }
       } else if (payload.destination.name === payload.source.name) {
         this.message = { status: false, msg: 'Please Select Target Destination other than current destination' }

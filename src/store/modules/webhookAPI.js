@@ -144,7 +144,6 @@ const mutations = {
           console.log(date1)
           data.data.alerts[i].customPayload.date = date1
           state.alertPayload.push(data.data.alerts[i].customPayload)
-          state.alertData = data.data.alerts
           console.log(state.alertPayload)
         }
       }
@@ -164,9 +163,10 @@ const mutations = {
           obj.timestamp = date
         })
         state.payload.push(obj)
-        state.data = data.data.data
       }
       console.log(state.payload)
+      state.data = data.data.data
+      state.alertData = data.data.alerts
       state.refresh = false
       return state.data
     })
