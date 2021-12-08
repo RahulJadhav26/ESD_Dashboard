@@ -132,6 +132,8 @@ const mutations = {
       for (var i in data.data.alerts) {
         console.log(data.data.alerts[i])
         data.data.alerts[i].customPayload = data.data.alerts[i].event_data
+        data.data.alerts[i].customPayload.id = data.data.alerts[i]._id
+        data.data.alerts[i].customPayload.device = data.data.alerts[i].device.thing_name
         console.log(data.data.alerts[i])
         if (Object.prototype.hasOwnProperty.call(data.data.alerts[i].event_data, 'timestamp')) {
           var date1 = new Date(Number(data.data.alerts[i].event_data.timestamp))
@@ -169,6 +171,11 @@ const mutations = {
       state.alertData = data.data.alerts
       state.refresh = false
       return state.data
+    })
+  },
+  'ACK_SENSOR' (state, alert) {
+    routes.acknowledgeAlert(alert).then(result => {
+      console.log(result)
     })
   }
 }
@@ -215,6 +222,10 @@ const actions = {
   editSensor: ({ commit }, payload) => {
     console.log('Action editSensor')
     commit('EDIT_SENSOR', payload)
+  },
+  acknowledgeAlert: ({ commit }, alert) => {
+    console.log('Action acknowledge Sensor')
+    commit('ACK_SENSOR', alert)
   }
 }
 const getters = {

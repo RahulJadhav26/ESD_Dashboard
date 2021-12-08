@@ -53,5 +53,9 @@ export default {
   getAllBuilding () {
     console.log('Api getAllBuilding Hit')
     return Api().get('/esd/getAllBuildings')
+  },
+  acknowledgeAlert (alert) {
+    console.log('Api acknowlegdeAlert Hit')
+    return Api().post('/esd/acknowledgeAlert', alert)
   }
 }

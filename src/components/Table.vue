@@ -1,5 +1,12 @@
 <template>
 <div style="margin:27px;">
+  <v-snackbar
+  v-model="snackbar"
+  absolute
+  bottom
+  color="deep-purple lighten-3"
+  :timeout="timeout">Alert Acknowledgement Request Sent
+  </v-snackbar>
     <v-card
     class="Card">
       <v-toolbar flat>
@@ -132,9 +139,35 @@
         :search="alertsearch"
         :items="alertPayload"
       >
-      <!-- <template v-slot:item.timestamp= "{ item }">
-        <div>{{Date(item.timestamp)}}</div>
-      </template> -->
+      <template v-slot:item.triggered= "{ item }">
+        <div>
+          <v-chip
+            class="ma-2"
+            color="red"
+            text-color="white"
+            v-if="item.triggered"
+          >
+          {{!item.triggered}}
+          </v-chip>
+          <v-chip
+            class="ma-2"
+            color="success"
+            text-color="white"
+            v-if="!item.triggered"
+          >
+          {{!item.triggered}}
+          </v-chip>
+        </div>
+      </template>
+      <template  v-slot:item.actions = "{ item }">
+          <v-icon
+            class="mr-2"
+            @click="acknowledge(item)"
+            :disabled= "!item.triggered"
+          >
+            mdi-clipboard-check-outline
+          </v-icon>
+      </template>
       </v-data-table>
     </v-card>
 </div>
@@ -152,6 +185,8 @@ export default {
     dialogm1: '',
     dialog: false,
     dates: [],
+    snackbar: false,
+    timeout: 5000,
     alertsearch: '',
     date: new Date(),
     headers: [],
@@ -167,6 +202,14 @@ export default {
       {
         text: 'Date',
         value: 'date'
+      },
+      {
+        text: 'Acknowledged',
+        value: 'triggered'
+      },
+      {
+        text: 'Actions',
+        value: 'actions'
       }
     ]
   }),
@@ -205,8 +248,14 @@ export default {
   methods: {
     ...mapActions({
       // getData: 'getData',
-      getAllData: 'getAllData'
+      getAllData: 'getAllData',
+      acknowledgeAlert: 'acknowledgeAlert'
     }),
+    acknowledge (item) {
+      this.acknowledgeAlert(item).then(() => {
+        this.snackbar = true
+      })
+    },
     DownloadAll () {
       var uplink = this.payload
       console.log(this.payload)
