@@ -1,6 +1,7 @@
 <template>
 <div>
   <div class="text-center">
+    <H1>Hello</H1>
    <!-- <v-progress-circular
       :size="70"
       :width="7"

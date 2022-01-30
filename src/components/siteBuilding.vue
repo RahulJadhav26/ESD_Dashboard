@@ -13,22 +13,20 @@
       </div>
       <div  v-if="!refresh" >
         <h1 class="text-center text">{{this.$route.params.name}}</h1>
-      <v-card flat style="padding-top:50px;" class="d-flex justify-space-around flatCard">
+      <!-- <v-card flat style="padding-top:50px;" class="d-flex justify-space-around flatCard">
         <v-card elevation="10" class='Card' style="width:300px; height:200px;">
         <h4 class="text-center text mt-5"> Total Number of Readings </h4>
         <v-card-text>
           <h1 class='text-center text pt-5' style="font-size:4.5rem;">{{data.length}}</h1>
-          <!-- <h1 class='text-center text pt-5' style="font-size:4.5rem;">0</h1> -->
         </v-card-text>
       </v-card>
       <v-card elevation="10" class='Card shadow-lg' style="width:300px; height:200px;">
         <h4 class="text-center text mt-5"> Total Number of Alerts </h4>
         <v-card-text>
           <h1 class='text-center text pt-5' style="font-size:4.5rem;">{{alertData.length}}</h1>
-          <!-- <h1 class='text-center text pt-5' style="font-size:4.5rem;">0</h1> -->
         </v-card-text>
       </v-card>
-      </v-card>
+      </v-card> -->
       <v-card flat
         class="d-flex justify-center flatCard"
         style="margin-top:25px;">
@@ -99,7 +97,7 @@ export default {
     // Get all the Data and alerts for the specific building using
     // the params(Building Name) passed and stores the data in state.data
     // and alert data in state.alertData
-    this.getAllData({ database: this.$route.params.name })
+    // this.getAllData({ database: this.$route.params.name })
     // Gets all the sensor names from the specific building which is passed as obj and
     // store all the sensor names in state.sensors
     // Declares state.sitebuilding as the current building name
