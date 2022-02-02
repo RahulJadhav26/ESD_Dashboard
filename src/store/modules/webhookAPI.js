@@ -21,7 +21,6 @@ const mutations = {
   'GET_SENSOR' (state, obj) {
     routes.getCollections(obj)
       .then(data => {
-        console.log(data.data.data)
         var sensors = []
         for (var element in data.data.data) {
           sensors.push(data.data.data[element])
@@ -37,7 +36,6 @@ const mutations = {
     })
   },
   'GET_DATABASES' (state) {
-    console.log('database mutation')
     routes.getDatabases().then(data => {
       state.refresh = true
       state.databases = []
@@ -50,7 +48,6 @@ const mutations = {
   },
   'GET_ALL_DATA' (state, database) {
     state.refresh = true
-    console.log(database)
     state.data = []
     state.payload = []
     state.alertPayload = []
@@ -58,10 +55,7 @@ const mutations = {
     routes.getAllData(database).then(data => {
       state.data = data.data.data
       state.alertData = data.data.alerts
-      // console.log(state.data)
-      // console.log(state.alertData)
     }).then(() => {
-      // console.log(state.data.length)
       if (state.data.length !== 0) {
         state.refresh = false
       }
@@ -69,7 +63,6 @@ const mutations = {
   },
   'GET_ALL_SENSORS' (state) {
     routes.getAllSensors().then(data => {
-      console.log(data.data)
       state.allSensors = data.data.data
     })
   },
@@ -94,7 +87,6 @@ const mutations = {
     })
   },
   'FIND_BUILDING' (state, sensor) {
-    console.log('findBuilding Mutation')
     state.sensorBuilding = []
     routes.findBuilding(sensor).then(data => {
       state.sensorBuilding = data.data.data
@@ -108,7 +100,6 @@ const mutations = {
   },
   'GET_SENSOR_DATA' (state, obj) {
     routes.getCollectionData(obj).then(data => {
-      console.log('Refreshed')
       state.refresh = true
       state.data = []
       state.alertData = []
@@ -127,15 +118,12 @@ const mutations = {
           state.payloadHeaders.push(headers)
         })
         state.payloadHeaders.push({ text: 'Timestamp', value: 'timestamp' })
-        console.log(state.payloadHeaders)
       }
 
       for (var i in data.data.alerts) {
-        console.log(data.data.alerts[i])
         data.data.alerts[i].customPayload = data.data.alerts[i].event_data
         data.data.alerts[i].customPayload.id = data.data.alerts[i]._id
         data.data.alerts[i].customPayload.device = data.data.alerts[i].device.thing_name
-        console.log(data.data.alerts[i])
         if (Object.prototype.hasOwnProperty.call(data.data.alerts[i].event_data, 'timestamp')) {
           var date1 = new Date(Number(data.data.alerts[i].event_data.timestamp))
           date1 = 'TIME: ' + date1.getHours() +
@@ -144,10 +132,8 @@ const mutations = {
           ' DATE: ' + (date1.getMonth() + 1) +
           '/' + date1.getDate() +
           '/' + date1.getFullYear()
-          console.log(date1)
           data.data.alerts[i].customPayload.date = date1
           state.alertPayload.push(data.data.alerts[i].customPayload)
-          console.log(state.alertPayload)
         }
       }
       for (var j in data.data.data) {
@@ -167,7 +153,6 @@ const mutations = {
         })
         state.payload.push(obj)
       }
-      console.log(state.payload)
       state.data = data.data.data
       state.alertData = data.data.alerts
       state.refresh = false
@@ -176,7 +161,6 @@ const mutations = {
   },
   'ACK_SENSOR' (state, alert) {
     routes.acknowledgeAlert(alert).then(result => {
-      console.log(result)
     })
   }
 }
@@ -192,40 +176,30 @@ const actions = {
     commit('GET_SENSOR', obj)
   },
   getCollectionData: ({ commit }, obj) => {
-    console.log('Action getCollectionData')
-    console.log(obj)
     commit('GET_SENSOR_DATA', obj)
   },
   getDatabases: ({ commit }) => {
-    console.log('Action getDatabases')
     commit('GET_DATABASES')
   },
   getAllSensors: ({ commit }) => {
-    console.log('Action getAllSensors')
     commit('GET_ALL_SENSORS')
   },
   addBuilding: ({ commit }, building) => {
-    console.log('Action addBuilding')
     commit('ADD_BUILDING', building)
   },
   getAllSensorCollection: ({ commit }) => {
-    console.log('Action getAllSensorCollection')
     commit('GET_ALL_SENSOR_COLLECTION')
   },
   getAllBuilding: ({ commit }) => {
-    console.log('Action getAllBuilding')
     commit('GET_ALL_BUILDING')
   },
   findBuilding: ({ commit }, sensor) => {
-    console.log('Action findBuilding')
     commit('FIND_BUILDING', sensor)
   },
   editSensor: ({ commit }, payload) => {
-    console.log('Action editSensor')
     commit('EDIT_SENSOR', payload)
   },
   acknowledgeAlert: ({ commit }, alert) => {
-    console.log('Action acknowledge Sensor')
     commit('ACK_SENSOR', alert)
   }
 }

@@ -114,7 +114,6 @@ export default {
   watch: {
     'payload.sensor': function (newVal, oldVal) {
       var obj = { sensor: newVal }
-      console.log(obj)
       this.findBuilding(obj)
     },
     sensorBuilding: function (newVal, oldVal) {

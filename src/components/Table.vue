@@ -258,9 +258,7 @@ export default {
     },
     DownloadAll () {
       var uplink = this.payload
-      console.log(this.payload)
       const result = XLSX.utils.json_to_sheet(uplink)
-      console.log(result)
       const wb = XLSX.utils.book_new()
       XLSX.utils.book_append_sheet(wb, result, 'data')
       XLSX.writeFile(wb, 'Download.xlsx')
@@ -273,7 +271,6 @@ export default {
         // var myDate = this.dates[i]
         // myDate = myDate.split('-')
         // var newDate = new Date(myDate[2], myDate[1] - 1, myDate[0])
-        // console.log(newDate.getTime())
         var datum = Date.parse(this.dates[i] + ' 00:00:00')
         if (max < datum) {
           max = datum
@@ -301,11 +298,9 @@ export default {
           })
           payload.push(obj)
         }
-        // console.log(payload)
       })
         .then(() => {
           const result = XLSX.utils.json_to_sheet(payload)
-          console.log(result)
           const wb = XLSX.utils.book_new()
           XLSX.utils.book_append_sheet(wb, result, 'data')
           XLSX.writeFile(wb, 'Download.xlsx')

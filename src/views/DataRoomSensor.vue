@@ -135,7 +135,6 @@ export default {
       this.alertThreshold = []
       this.alertData = []
       this.showAlertChart = false
-      console.log(newVal)
       for (var i in newVal.slice(-8)) {
         this.alertData.push(newVal[i].value)
         var date = new Date(Number(newVal[i].timestamp))

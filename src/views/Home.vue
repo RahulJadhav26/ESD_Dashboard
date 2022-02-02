@@ -95,7 +95,6 @@ export default {
     }),
     // On Button click it navigates to /siteBuilding passing the building name as the param
     navigate (db) {
-      console.log(db)
       var obj = {
         database: db
       }

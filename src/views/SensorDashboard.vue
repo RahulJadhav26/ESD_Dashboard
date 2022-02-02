@@ -108,7 +108,6 @@ export default {
         for (var property in this.payload[i]) {
           if (Object.prototype.hasOwnProperty.call(this.payload[i], property) && property.toString().toLowerCase().includes('temp')) {
             this.payloadInternalTemp.push(this.payload[i][property])
-            console.log(this.payloadInternalTemp)
           }
         }
       }
@@ -142,7 +141,6 @@ export default {
       this.alertThreshold = []
       this.alertChartData = []
       this.showAlertChart = false
-      console.log(newVal)
       for (var i in newVal.slice(-5)) {
         this.alertChartData.push(newVal[i].value)
         var date = new Date(Number(newVal[i].timestamp))
@@ -193,7 +191,6 @@ export default {
     }
   },
   created () {
-    console.log(this.$route.query)
     // Fetches the desired sensor data and alerts and stores the custom payload in state.alertPayload and state.payload
     // Lastly it stores the raw data in state.alertDate and state.data
     this.getCollectionData({ database: this.$route.query.database, collection: this.$route.query.sensor })
