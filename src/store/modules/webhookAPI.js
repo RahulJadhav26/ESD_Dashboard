@@ -69,6 +69,7 @@ const mutations = {
   },
   'GET_ALL_SENSORS' (state) {
     routes.getAllSensors().then(data => {
+      console.log(data.data)
       state.allSensors = data.data.data
     })
   },
