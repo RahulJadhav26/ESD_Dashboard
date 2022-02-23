@@ -57,5 +57,15 @@ export default {
   acknowledgeAlert (alert) {
     // console.log('Api acknowlegdeAlert Hit')
     return Api().post('/esd/acknowledgeAlert', alert)
+  },
+  loginUser (user) {
+    return Api().post('/api/users/login', user)
+  },
+  getProfile () {
+    console.log('called Profile')
+    return Api().get('/api/users/profile')
+  },
+  signUp (userData) {
+    return Api().post('/api/users/register', userData)
   }
 }

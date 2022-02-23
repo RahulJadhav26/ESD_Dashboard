@@ -77,7 +77,8 @@ export default {
       allSensors: 'allSensors',
       siteBuilding: 'siteBuilding',
       refresh: 'refresh',
-      buildings: 'buildings'
+      buildings: 'buildings',
+      user: 'user'
     })
   },
   created () {
@@ -85,9 +86,11 @@ export default {
     this.getAllSensors()
     // Get all buildings to display the list of buildings on the page and stored in state.buildings
     this.getBuildings()
+    this.getProfile()
   },
   methods: {
     ...mapActions({
+      getProfile: 'getProfile',
       getSensors: 'getSensors',
       getAllData: 'getAllData',
       getAllSensors: 'getAllSensors',

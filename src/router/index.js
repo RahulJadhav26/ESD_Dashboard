@@ -8,8 +8,10 @@ import AddSensor from '../views/AddSensor.vue'
 import AddSiteBuilding from '../views/AddSiteBuilding.vue'
 import collection from '../views/SensorDashboard'
 import Login from '../views/Login'
+import Signin from '../views/Signin.vue'
+import Profile from '../views/Profile.vue'
 import ForgotPass from '../views/ForgotPass.vue'
-// import firebase from 'firebase'
+import store from '../store'
 Vue.use(VueRouter)
 
 const routes = [
@@ -18,16 +20,33 @@ const routes = [
     name: 'Home',
     component: Home,
     meta: {
-      authRequired: true
+      requiresAuth: true
     }
   },
   {
     path: '/login',
     name: 'Login',
-    component: Login
+    component: Login,
+    meta: {
+      requiresGuest: true
+    }
   },
   {
-    path: '/forgot-password',
+    path: '/signin',
+    component: Signin,
+    meta: {
+      requiresGuest: true
+    }
+  },
+  {
+    path: '/profile',
+    component: Profile,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/forgotPassword',
     name: 'forgotPass',
     component: ForgotPass
   },
@@ -35,9 +54,6 @@ const routes = [
     path: '/siteBuilding/:name',
     name: 'siteBuilding',
     component: siteBuilding
-    // meta: {
-    //   authRequired: true
-    // }
   },
   {
     path: '/collection/:name',
@@ -58,9 +74,6 @@ const routes = [
     path: '/dataRoomSensor',
     name: 'DataRoomSensor',
     component: DataRoomSensor
-    // meta: {
-    //   authRequired: true
-    // }
   }
 ]
 
@@ -68,20 +81,23 @@ const router = new VueRouter({
   routes,
   mode: 'history'
 })
-// router.beforeEach((to, from, next) => {
-//   if (to.matched.some(record => record.meta.authRequired)) {
-//     console.log(store.state.sessionUser)
-//     if (store.state.sessionUser === '') {
-//       alert('You must be logged in to see this page')
-//       next({
-//         path: '/Login'
-//       })
-//     } else {
-//       next()
-//     }
-//   } else {
-//     next()
-//   }
-// })
-
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!store.getters.isLoggedIn) {
+      // Redirect to Login Page
+      next('/login')
+    } else {
+      next()
+    }
+  } else if (to.matched.some(record => record.meta.requiresGuest)) {
+    if (store.getters.isLoggedIn) {
+      // Redirect to Profile Page
+      next('/profile')
+    } else {
+      next()
+    }
+  } else {
+    next()
+  }
+})
 export default router
