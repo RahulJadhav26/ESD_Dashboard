@@ -15,13 +15,13 @@
     <h1 class="mb-5 text text-center">ESD Monitoring</h1>
     <v-card flat class="d-flex justify-space-around flatCard">
        <v-card elevation="10" class='Card shadow-lg' style="width:300px; height:200px;">
-        <h4 class="text-center text mt-5"> Total Active Sensors </h4>
+        <h4 class="text-center text mt-5"><v-icon class='pr-2' large> mdi-alarm-light-outline</v-icon> Total Active Sensors </h4>
         <v-card-text>
           <h1 class='text-center text pt-5' style="font-size:4.5rem;">{{allSensors.length}}</h1>
         </v-card-text>
       </v-card>
        <v-card elevation="10" class='Card' style="width:300px; height:200px;">
-        <h4 class="text-center text mt-5"> Site Buildings</h4>
+        <h4 class="text-center text mt-5"><v-icon class='pr-2' large> mdi-home-city-outline</v-icon> Site Buildings</h4>
         <v-card-text>
           <h1 class='text-center text pt-5' style="font-size:4.5rem;">{{buildings.length}}</h1>
         </v-card-text>

@@ -19,7 +19,7 @@
             <v-list>
              <v-list-item>
                 <v-list-item-content>
-                  <v-list-item-title>Email: <span class="font-weight-bold">{{user.email}}</span></v-list-item-title>
+                   <v-list-item-title>Name: <span class="font-weight-bold">{{user.name}}</span></v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item>
@@ -29,7 +29,7 @@
               </v-list-item>
               <v-list-item>
                 <v-list-item-content>
-                   <v-list-item-title>Name: <span class="font-weight-bold">{{user.name}}</span></v-list-item-title>
+                  <v-list-item-title>Email: <span class="font-weight-bold">{{user.email}}</span></v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
               <v-list-item>

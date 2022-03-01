@@ -38,32 +38,32 @@
               <br>
                 <v-list-item href="/">
                   <v-list-item-icon>
-                    <v-icon>mdi-home</v-icon>
+                    <v-icon>mdi-home-outline</v-icon>
                   </v-list-item-icon>
                 <v-list-item-title>Home</v-list-item-title>
                 </v-list-item>
 
                 <v-list-item href='/profile'>
                   <v-list-item-icon>
-                    <v-icon>mdi-account</v-icon>
+                    <v-icon>mdi-account-outline</v-icon>
                   </v-list-item-icon>
                   <v-list-item-title >Account</v-list-item-title>
                 </v-list-item>
                 <v-list-item v-if="user.Role == 'admin'" href='/addSiteBuilding'>
                   <v-list-item-icon>
-                    <v-icon>mdi-account</v-icon>
+                    <v-icon>mdi-home-city-outline</v-icon>
                   </v-list-item-icon>
                   <v-list-item-title>Add  Site Building</v-list-item-title>
                 </v-list-item>
                 <v-list-item v-if="user.Role == 'admin'" href='/addSensor'>
                   <v-list-item-icon>
-                    <v-icon>mdi-account</v-icon>
+                    <v-icon>mdi-alarm-light-outline</v-icon>
                   </v-list-item-icon>
                   <v-list-item-title>Add/Edit Sensors</v-list-item-title>
                 </v-list-item>
                 <v-list-item v-if="user.Role == 'admin'" href='/signin'>
                   <v-list-item-icon>
-                    <v-icon>mdi-account</v-icon>
+                    <v-icon>mdi-account-multiple-plus-outline</v-icon>
                   </v-list-item-icon>
                   <v-list-item-title>Manage Users</v-list-item-title>
                 </v-list-item>
