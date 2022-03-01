@@ -1,6 +1,6 @@
 <template>
   <div>
-      <h1 class="text-center text">Register</h1>
+      <h1 class="text-center text">Register New User</h1>
       <Errors v-if="errors" :msg='errors'/>
             <v-card flat class="d-flex justify-space-around flatCard">
                 <form @submit.prevent='registerUser()'>
@@ -60,8 +60,8 @@
                         >
                     </div>
                     <v-card-actions>
-                    <input type='submit' class=" float-left btn btn-primary" value='Register' />
-                    <router-link class="nav-link" tag='a' to="/login">Already have an Account?</router-link>
+                    <v-btn type='submit' color="primary" class="float-left" dark >Add user</v-btn>
+                    <!-- <router-link class="nav-link" tag='a' to="/login">Already have an Account?</router-link> -->
                     </v-card-actions>
                 </form>
             </v-card>
@@ -88,7 +88,7 @@ export default {
     ...mapGetters(['errors'])
   },
   methods: {
-    ...mapActions(['register']),
+    ...mapActions(['register', 'Error']),
     registerUser () {
       const user = {
         username: this.username,
@@ -96,7 +96,8 @@ export default {
         confirm_password: this.confirmPassword,
         email: this.email,
         name: this.name,
-        Role: 'user'
+        Role: 'user',
+        blocked: false
       }
       this.register(user).then(res => {
         if (res.data.success) {

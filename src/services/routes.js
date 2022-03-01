@@ -67,5 +67,13 @@ export default {
   },
   signUp (userData) {
     return Api().post('/api/users/register', userData)
+  },
+  getAllUsers () {
+    return Api().get('/api/users/getAllUsers')
+  },
+  deleteUsers (user) {
+    console.log('Api called')
+    console.log(user)
+    return Api().post('api/users/deleteUsers', user)
   }
 }

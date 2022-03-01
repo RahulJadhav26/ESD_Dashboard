@@ -35,7 +35,7 @@ const routes = [
     path: '/signin',
     component: Signin,
     meta: {
-      requiresGuest: true
+      requiresAuth: true
     }
   },
   {

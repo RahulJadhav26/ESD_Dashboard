@@ -17,9 +17,9 @@
             <v-spacer></v-spacer>
             <v-btn  class="text" v-if='isLoggedIn' text href="/">Home</v-btn>
             <v-btn  class="text" v-if='isLoggedIn' text @click="logout"> Logout</v-btn>
-          <!-- <v-btn icon>
+            <v-btn v-if='isLoggedIn' class="text" href='/profile' text>
               <v-icon color="">mdi-account-circle</v-icon>
-            </v-btn><span style="font-size:12px;">Hello</span> -->
+            <span> {{user.Role}}@{{user.name}}</span></v-btn>
             <v-app-bar-nav-icon v-if='isLoggedIn' @click="drawer = true"></v-app-bar-nav-icon>
           </v-app-bar>
           <v-navigation-drawer
@@ -60,6 +60,12 @@
                     <v-icon>mdi-account</v-icon>
                   </v-list-item-icon>
                   <v-list-item-title>Add/Edit Sensors</v-list-item-title>
+                </v-list-item>
+                <v-list-item v-if="user.Role == 'admin'" href='/signin'>
+                  <v-list-item-icon>
+                    <v-icon>mdi-account</v-icon>
+                  </v-list-item-icon>
+                  <v-list-item-title>Manage Users</v-list-item-title>
                 </v-list-item>
               </v-list-item-group>
             </v-list>

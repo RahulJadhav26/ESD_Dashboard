@@ -6,7 +6,8 @@ const state = {
   token: localStorage.getItem('token') || '',
   user: { Role: 'NotDefined' },
   status: '',
-  errors: null
+  errors: null,
+  allUsers: []
 }
 
 const getters = {
@@ -19,7 +20,8 @@ const getters = {
   },
   authState: state => state.status,
   user: state => state.user,
-  errors: state => state.errors
+  errors: state => state.errors,
+  allUsers: state => state.allUsers
 }
 
 const actions = {
@@ -78,6 +80,17 @@ const actions = {
   Error ({ commit }, error) {
     console.log('eeeeeror')
     commit('Error', error)
+  },
+
+  async getAllUsers ({ commit }) {
+    const users = await routes.getAllUsers()
+    console.log(users)
+    commit('get_All_Users', users)
+  },
+  async deleteUsers ({ commit }, user) {
+    console.log('Deleting User')
+    const result = await routes.deleteUsers(user)
+    return result
   }
 
 }
@@ -124,6 +137,10 @@ const mutations = {
   },
   Error (state, error) {
     state.errors = error.msg
+  },
+  get_All_Users (state, users) {
+    console.log(users)
+    state.allUsers = users.data
   }
 }
 

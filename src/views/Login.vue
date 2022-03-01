@@ -28,8 +28,8 @@
                         >
                     </div>
                     <v-card-actions>
-                    <input type="submit" class=" float-left btn btn-primary" value="Login"/>
-                    <router-link class="nav-link" tag='a' to="/signin"> Need an Account? </router-link>
+                    <v-btn type='submit' color="primary" class="float-left" dark >Login</v-btn>
+                    <!-- <router-link class="nav-link" tag='a' to="/signin"> Need an Account? </router-link> -->
                     </v-card-actions>
                 </form>
             </v-card>
