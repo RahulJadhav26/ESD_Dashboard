@@ -40,14 +40,20 @@ services:
     environment:
        PORT: 8888
       #  url: 'mongodb://mongodb:27017'
-       MONGO_ADMIN: admin
-       MONGO_PASS: password
-       MONGO_SERVER: mongodb
-       MONGO_PORT: 27017
+      #  MONGO_ADMIN: admin
+      #  MONGO_PASS: password
+      #  MONGO_SERVER: mongodb
+      #  MONGO_PORT: 27017
     restart: always
     depends_on:
       - mongodb
 
+  dashboard:
+    container_name: dashboard
+    build: .
+    ports:
+      - 9999:8080
+    restart: always
 
 
 volumes: 
