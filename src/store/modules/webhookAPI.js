@@ -108,8 +108,12 @@ const mutations = {
       state.payloadHeaders = []
       state.sensorBuilding = []
       var headers = {}
-
-      if (Object.prototype.hasOwnProperty.call(data.data.data[0].event_data, 'payload')) {
+      console.log(data.data.data.length)
+      if (data.data.data.length === 0 && data.data.alerts.length === 0) {
+        state.data = data.data.data
+        state.alertData = data.data.alerts
+        state.refresh = false
+      } else {
         data.data.data[0].event_data.payload.forEach(element => {
           headers = {
             text: element.name,
@@ -118,44 +122,43 @@ const mutations = {
           state.payloadHeaders.push(headers)
         })
         state.payloadHeaders.push({ text: 'Timestamp', value: 'timestamp' })
-      }
-
-      for (var i in data.data.alerts) {
-        data.data.alerts[i].customPayload = data.data.alerts[i].event_data
-        data.data.alerts[i].customPayload.id = data.data.alerts[i]._id
-        data.data.alerts[i].customPayload.device = data.data.alerts[i].device.thing_name
-        if (Object.prototype.hasOwnProperty.call(data.data.alerts[i].event_data, 'timestamp')) {
-          var date1 = new Date(Number(data.data.alerts[i].event_data.timestamp))
-          date1 = 'TIME: ' + date1.getHours() +
-          ':' + date1.getMinutes() +
-          ':' + date1.getSeconds() +
-          ' DATE: ' + (date1.getMonth() + 1) +
-          '/' + date1.getDate() +
-          '/' + date1.getFullYear()
-          data.data.alerts[i].customPayload.date = date1
-          state.alertPayload.push(data.data.alerts[i].customPayload)
+        for (var i in data.data.alerts) {
+          data.data.alerts[i].customPayload = data.data.alerts[i].event_data
+          data.data.alerts[i].customPayload.id = data.data.alerts[i]._id
+          data.data.alerts[i].customPayload.device = data.data.alerts[i].device.thing_name
+          if (Object.prototype.hasOwnProperty.call(data.data.alerts[i].event_data, 'timestamp')) {
+            var date1 = new Date(Number(data.data.alerts[i].event_data.timestamp))
+            date1 = 'TIME: ' + date1.getHours() +
+            ':' + date1.getMinutes() +
+            ':' + date1.getSeconds() +
+            ' DATE: ' + (date1.getMonth() + 1) +
+            '/' + date1.getDate() +
+            '/' + date1.getFullYear()
+            data.data.alerts[i].customPayload.date = date1
+            state.alertPayload.push(data.data.alerts[i].customPayload)
+          }
         }
-      }
-      for (var j in data.data.data) {
-        if (Object.prototype.hasOwnProperty.call(data.data.data[j].event_data, 'timestamp')) {
-          var date = new Date(data.data.data[j].event_data.payload[0].timestamp)
-          date = date.getHours() +
-          ':' + date.getMinutes() +
-          ':' + date.getSeconds() +
-          ' DATE: ' + (date.getMonth() + 1) +
-          '/' + date.getDate() +
-          '/' + date.getFullYear()
+        for (var j in data.data.data) {
+          if (Object.prototype.hasOwnProperty.call(data.data.data[j].event_data, 'timestamp')) {
+            var date = new Date(data.data.data[j].event_data.payload[0].timestamp)
+            date = date.getHours() +
+            ':' + date.getMinutes() +
+            ':' + date.getSeconds() +
+            ' DATE: ' + (date.getMonth() + 1) +
+            '/' + date.getDate() +
+            '/' + date.getFullYear()
+          }
+          var obj = {}
+          data.data.data[j].event_data.payload.forEach(element => {
+            obj[element.name] = element.value
+            obj.timestamp = date
+          })
+          state.payload.push(obj)
         }
-        var obj = {}
-        data.data.data[j].event_data.payload.forEach(element => {
-          obj[element.name] = element.value
-          obj.timestamp = date
-        })
-        state.payload.push(obj)
+        state.data = data.data.data
+        state.alertData = data.data.alerts
+        state.refresh = false
       }
-      state.data = data.data.data
-      state.alertData = data.data.alerts
-      state.refresh = false
       return state.data
     })
   },

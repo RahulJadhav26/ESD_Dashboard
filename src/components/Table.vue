@@ -11,7 +11,7 @@
     class="Card">
       <v-toolbar flat>
       <v-card-title>
-        <h2 class="text">{{data[0].device.thing_name}}</h2>
+        <h2 class="text">{{this.$route.query.sensor}}</h2>
       </v-card-title>
       <v-spacer></v-spacer>
       <v-card-actions>
@@ -104,7 +104,7 @@
           v-if="refresh"
         ></v-progress-circular>
       </div>
-      <v-card-text class='text' v-if="checkData">Total number of readings: {{payload.length}}</v-card-text>
+      <v-card-text class='text'>Total number of readings: {{payload.length}}</v-card-text>
       <v-data-table
         class="text"
         :headers="payloadHeaders"

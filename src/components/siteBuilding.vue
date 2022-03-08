@@ -13,6 +13,19 @@
       </div>
       <div  v-if="!refresh" >
         <h1 class="text-center text">{{this.$route.params.name}}</h1>
+        <div>
+          <v-tabs
+            center-active
+            background-color="transparent"
+            v-model="tab"
+            >
+              <v-tab @click="getAllData({ database: this.$route.params.name, Day: 1 })" >1 Day</v-tab>
+              <v-tab @click="getAllData({ database: this.$route.params.name, Day: 7 })">1 Week</v-tab>
+              <v-tab @click="getAllData({ database: this.$route.params.name, Day: 30 })">1 Month</v-tab>
+              <v-tab @click="getAllData({ database: this.$route.params.name, Day: 90 })">3 Months</v-tab>
+              <v-tab @click="getAllData({ database: this.$route.params.name, Day: 180 })">6 Months</v-tab>
+          </v-tabs>
+        </div>
       <v-card flat style="padding-top:50px;" class="d-flex justify-space-around flatCard">
         <v-card elevation="10" class='Card' style="width:300px; height:200px;">
         <h4 class="text-center text mt-5"> Total Number of Readings </h4>
@@ -71,7 +84,8 @@ export default {
   data () {
     return {
       id: '',
-      loading: false
+      loading: false,
+      tab: null
     }
   },
   watch: {
@@ -95,7 +109,7 @@ export default {
     // Get all the Data and alerts for the specific building using
     // the params(Building Name) passed and stores the data in state.data
     // and alert data in state.alertData
-    this.getAllData({ database: this.$route.params.name })
+    this.getAllData({ database: this.$route.params.name, Day: 1 })
     // Gets all the sensor names from the specific building which is passed as obj and
     // store all the sensor names in state.sensors
     // Declares state.sitebuilding as the current building name
