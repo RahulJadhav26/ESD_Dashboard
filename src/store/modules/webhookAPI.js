@@ -100,7 +100,7 @@ const mutations = {
   },
   'GET_SENSOR_DATA' (state, obj) {
     routes.getCollectionData(obj).then(data => {
-      state.refresh = true
+      state.refresh = false
       state.data = []
       state.alertData = []
       state.payload = []
@@ -109,11 +109,18 @@ const mutations = {
       state.sensorBuilding = []
       var headers = {}
       console.log(data.data.data.length)
+      console.log('Inside Mutation')
+      console.log(state.refresh)
       if (data.data.data.length === 0 && data.data.alerts.length === 0) {
         state.data = data.data.data
         state.alertData = data.data.alerts
-        state.refresh = false
+        console.log('No data')
+        console.log(state.refresh)
+        state.refresh = true
       } else {
+        state.refresh = false
+        console.log('Getting Data')
+        console.log(state.refresh)
         data.data.data[0].event_data.payload.forEach(element => {
           headers = {
             text: element.name,
@@ -157,7 +164,9 @@ const mutations = {
         }
         state.data = data.data.data
         state.alertData = data.data.alerts
-        state.refresh = false
+        state.refresh = true
+        console.log('Got Data')
+        console.log(state.refresh)
       }
       return state.data
     })
@@ -173,6 +182,7 @@ const actions = {
     commit('GET_BUILDINGS')
   },
   getAllData: ({ commit }, database) => {
+    console.log(database)
     commit('GET_ALL_DATA', database)
   },
   getSensors: ({ commit }, obj) => {

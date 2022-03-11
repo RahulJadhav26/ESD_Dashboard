@@ -19,26 +19,36 @@
           center-active
           background-color="transparent"
           class="mb-4"
+          v-model="tab"
           >
-            <v-tab @click="getCollectionData({ database: this.$route.query.database, collection: this.$route.query.sensor, Day: 1 })">1 Day</v-tab>
-            <v-tab @click="getCollectionData({ database: this.$route.query.database, collection: this.$route.query.sensor, Day: 7 })">1 Week</v-tab>
-            <v-tab @click="getCollectionData({ database: this.$route.query.database, collection: this.$route.query.sensor, Day: 30 })">1 Month</v-tab>
-            <v-tab @click="getCollectionData({ database: this.$route.query.database, collection: this.$route.query.sensor, Day: 90 })">3 Months</v-tab>
-            <v-tab @click="getCollectionData({ database: this.$route.query.database, collection: this.$route.query.sensor, Day: 180 })">6 Months</v-tab>
+            <v-tab @click=" reload(1)">1 Day</v-tab>
+            <v-tab @click=" reload(7)">1 Week</v-tab>
+            <v-tab @click=" reload(30)">1 Month</v-tab>
+            <v-tab @click=" reload(90)">3 Months</v-tab>
+            <v-tab @click=" reload(180)">6 Months</v-tab>
         </v-tabs>
         </v-col>
         <v-col>
         <v-btn-toggle
           v-model="chart"
-          tile
           group
+          class="float-right"
         >
-          <v-btn value="line">
-            Humidity & Temperature Line Chart
-          </v-btn>
-          <v-btn value="bar">
+        <v-select
+          v-model="chart"
+          :items="items"
+          item-text="label"
+          item-value="value"
+          persistent-hint
+          filled
+          dense
+        ></v-select>
+          <!-- <v-btn value="line">
+           Humidity & temperature Line chart
+          </v-btn> -->
+          <!-- <v-btn value="bar">
             Alerts Chart
-          </v-btn>
+          </v-btn> -->
         </v-btn-toggle>
         </v-col>
         </v-row>
@@ -73,6 +83,15 @@ export default {
   },
   data () {
     return {
+      select: { label: 'Humidty & Temperature', value: 'line' },
+      items: [
+        { label: 'Humidity & Temperature', value: 'line' },
+        { label: 'CO2', value: 'co2line' },
+        { label: 'Humidity', value: 'Humidityline' },
+        { label: 'Alerts', value: 'bar' }
+
+      ],
+      tab: null,
       payloadLabels: [],
       payloadInternalTemp: [],
       payloadHumidity: [],
@@ -132,14 +151,17 @@ export default {
   },
   watch: {
     payload: function (newVal, oldVal) {
+      console.log(this.refresh)
       if (newVal.length === 0) {
         this.showChart = true
         this.showAlertChart = true
+        this.refresh = true
       } else {
         this.payloadLabels = []
         this.payloadInternalTemp = []
         this.payloadHumidity = []
         this.showChart = false
+        this.refresh = false
         for (var i = 0; i < this.payload.length; i++) {
           this.payloadLabels.push(this.payload[i].timestamp)
           this.payloadHumidity.push(this.payload[i].Humidity)
@@ -173,17 +195,20 @@ export default {
           ]
         }
         this.showChart = true
+        this.refresh = true
       }
     },
     alertPayload: function (newVal, oldVal) {
       if (newVal.length === 0) {
         this.showChart = true
         this.showAlertChart = true
+        this.refresh = true
       } else {
         this.alertLabels = []
         this.alertThreshold = []
         this.alertChartData = []
         this.showAlertChart = false
+        this.refresh = false
         for (var i in newVal) {
           this.alertChartData.push(newVal[i].value)
           var date = new Date(Number(newVal[i].timestamp))
@@ -217,6 +242,7 @@ export default {
           ]
         }
         this.showAlertChart = true
+        this.refresh = true
       }
     }
   },
@@ -225,7 +251,8 @@ export default {
       payload: 'payload',
       alertPayload: 'alertPayload',
       siteBuilding: 'siteBuilding',
-      alertData: 'alertData'
+      alertData: 'alertData',
+      refresh: 'refresh'
     }),
     linechartData: function () {
       return this.lineChartData
@@ -242,7 +269,26 @@ export default {
   methods: {
     ...mapActions({
       getCollectionData: 'getCollectionData'
-    })
+    }),
+    // Get new data with new range
+    reload (day) {
+      var obj = {
+        database: this.$route.params.name,
+        collection: this.$route.query.sensor,
+        Day: day
+      }
+      this.showChart = false
+      this.showAlertChart = false
+      this.alertLabels = []
+      this.alertThreshold = []
+      this.alertChartData = []
+      this.payloadLabels = []
+      this.payloadInternalTemp = []
+      this.payloadHumidity = []
+      this.mixChartData = {}
+      this.lineChartData = {}
+      this.getCollectionData(obj)
+    }
   }
 }
 </script>

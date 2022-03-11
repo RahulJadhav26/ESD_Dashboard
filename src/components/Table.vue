@@ -101,7 +101,7 @@
           :width="7"
           color="blue"
           indeterminate
-          v-if="refresh"
+          v-if="!refresh"
         ></v-progress-circular>
       </div>
       <v-card-text class='text'>Total number of readings: {{payload.length}}</v-card-text>
@@ -110,7 +110,7 @@
         :headers="payloadHeaders"
         :search="search"
         :items="payload"
-        v-if="!refresh"
+        v-if="refresh"
       >
       <!-- <template v-slot:header="{ header }">
       <h1> {{ "hello" + header.text}} </h1>

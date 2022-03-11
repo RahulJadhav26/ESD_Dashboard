@@ -19,11 +19,11 @@
             background-color="transparent"
             v-model="tab"
             >
-              <v-tab @click="getAllData({ database: this.$route.params.name, Day: 1 })" >1 Day</v-tab>
-              <v-tab @click="getAllData({ database: this.$route.params.name, Day: 7 })">1 Week</v-tab>
-              <v-tab @click="getAllData({ database: this.$route.params.name, Day: 30 })">1 Month</v-tab>
-              <v-tab @click="getAllData({ database: this.$route.params.name, Day: 90 })">3 Months</v-tab>
-              <v-tab @click="getAllData({ database: this.$route.params.name, Day: 180 })">6 Months</v-tab>
+              <v-tab @click="reload(1)" >1 Day</v-tab>
+              <v-tab @click="reload(7)">1 Week</v-tab>
+              <v-tab @click="reload(30)">1 Month</v-tab>
+              <v-tab @click="reload(90)">3 Months</v-tab>
+              <v-tab @click="reload(180)">6 Months</v-tab>
           </v-tabs>
         </div>
       <v-card flat style="padding-top:50px;" class="d-flex justify-space-around flatCard">
@@ -120,6 +120,14 @@ export default {
       getSensors: 'getSensors',
       getAllData: 'getAllData'
     }),
+    // Get new data with new range
+    reload (day) {
+      var obj = {
+        database: this.$route.params.name,
+        Day: day
+      }
+      this.getAllData(obj)
+    },
     // Directs to sensorDashboard page with sensor and sitebuilding as the parameters
     Goto (sensor) {
       var obj = {
