@@ -156,9 +156,9 @@ const mutations = {
             '/' + date.getFullYear()
           }
           var obj = {}
+          obj.timestamp = date
           data.data.data[j].event_data.payload.forEach(element => {
             obj[element.name] = element.value
-            obj.timestamp = date
           })
           state.payload.push(obj)
         }

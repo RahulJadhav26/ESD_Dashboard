@@ -30,14 +30,13 @@
         </v-col>
         <v-col>
         <v-btn-toggle
-          v-model="chart"
           group
           class="float-right"
         >
         <v-select
-          v-model="chart"
+          v-model="select"
           :items="items"
-          item-text="label"
+          item-text="text"
           item-value="value"
           persistent-hint
           filled
@@ -55,11 +54,11 @@
        </div>
        <div>
         <v-card  flat class="d-flex justify-center mx-2 flatCard">
-          <v-card v-if="showChart && chart == 'line' " class="chartCard mx-1 pa-2" style="width:100%;">
+          <v-card v-if="showChart && select != 'Alerts' " class="chartCard mx-1 pa-2" style="width:100%;">
               <line-chart :chartData="lineChartData" :options="options" />
           </v-card>
-            <v-card v-if="showAlertChart && chart == 'bar'"  class=" chartCard mx-1 pa-2" style="width:100%;">
-            <mix-chart   :chartData="mixChartData" :options="mixChartoptions"/>
+            <v-card v-if="showAlertChart && select == 'Alerts'"  class=" chartCard mx-1 pa-2" style="width:100%;">
+            <mix-chart :chartData="mixChartData" :options="mixChartoptions"/>
             </v-card>
         </v-card>
       </div>
@@ -83,18 +82,11 @@ export default {
   },
   data () {
     return {
-      select: { label: 'Humidty & Temperature', value: 'line' },
-      items: [
-        { label: 'Humidity & Temperature', value: 'line' },
-        { label: 'CO2', value: 'co2line' },
-        { label: 'Humidity', value: 'Humidityline' },
-        { label: 'Alerts', value: 'bar' }
-
-      ],
+      items: [],
       tab: null,
+      select: '',
       payloadLabels: [],
-      payloadInternalTemp: [],
-      payloadHumidity: [],
+      payloadParam: [],
       showChart: false,
       alertLabels: [],
       alertChartData: [],
@@ -150,24 +142,25 @@ export default {
     }
   },
   watch: {
-    payload: function (newVal, oldVal) {
-      console.log(this.refresh)
-      if (newVal.length === 0) {
-        this.showChart = true
-        this.showAlertChart = true
-        this.refresh = true
-      } else {
+    select: function (newVal, oldVal) {
+      this.showChart = false
+      this.payloadLabels = []
+      this.payloadParam = []
+      this.mixChartData = {}
+      this.lineChartData = {}
+      if (newVal !== 'Alerts') {
         this.payloadLabels = []
-        this.payloadInternalTemp = []
-        this.payloadHumidity = []
-        this.showChart = false
-        this.refresh = false
+        this.payloadParam = []
+        console.log(this.lineChartData)
+        // var selectParam = this.select
         for (var i = 0; i < this.payload.length; i++) {
           this.payloadLabels.push(this.payload[i].timestamp)
-          this.payloadHumidity.push(this.payload[i].Humidity)
           for (var property in this.payload[i]) {
             if (Object.prototype.hasOwnProperty.call(this.payload[i], property) && property.toString().toLowerCase().includes('temp')) {
-              this.payloadInternalTemp.push(this.payload[i][property])
+              this.payloadParam.push(this.payload[i][property])
+            }
+            if (Object.prototype.hasOwnProperty.call(this.payload[i], this.select)) {
+              this.payloadParam.push(this.payload[i][this.select])
             }
           }
         }
@@ -176,20 +169,92 @@ export default {
           datasets: [
             {
               type: 'line',
-              label: 'Internal temperature',
-              data: this.payloadInternalTemp.reverse(),
+              label: this.select,
+              data: this.payloadParam.reverse(),
               fill: false,
-              borderColor: 'rgb(255, 69, 58)',
+              borderColor: 'rgba(0,14,84)',
               // backgroundColor: 'rgb(255, 131, 125)',
               borderWidth: 4
-            },
+            }
+          ]
+        }
+        this.showChart = true
+        this.refresh = true
+      } else {
+        this.alertLabels = []
+        this.alertThreshold = []
+        this.alertChartData = []
+        this.showAlertChart = false
+        this.refresh = false
+        for (var j in newVal) {
+          this.alertChartData.push(newVal[j].value)
+          var date = new Date(Number(newVal[j].timestamp))
+          date = date.getHours() +
+          ':' + date.getMinutes() +
+          ':' + date.getSeconds() +
+           ' ' + (date.getMonth() + 1) +
+          '/' + date.getDate() +
+          '/' + date.getFullYear()
+          this.alertLabels.push(date)
+          this.alertThreshold.push(newVal[j].triggerData.triggers[0].conditions[0].value)
+        }
+        this.mixChartData = {
+          labels: this.alertLabels.reverse(),
+          datasets: [{
+            label: 'Alerts',
+            borderWidth: 2,
+            borderColor: 'rgba(75, 192, 192)',
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            data: this.alertChartData.reverse()
+          },
+          {
+            type: 'line',
+            label: 'Threshold',
+            data: this.alertThreshold.reverse(),
+            fill: false,
+            borderWidth: 4,
+            borderColor: 'rgb(255, 99, 132)',
+            backgroundColor: 'rgba(255, 99, 132, 0.2)'
+          }
+          ]
+        }
+        this.showAlertChart = true
+        this.refresh = true
+      }
+    },
+    payload: function (newVal, oldVal) {
+      console.log(this.refresh)
+      if (newVal.length === 0) {
+        this.showChart = true
+        this.showAlertChart = true
+        this.refresh = true
+      } else {
+        this.payloadLabels = []
+        this.payloadParam = []
+        this.showChart = false
+        this.refresh = false
+        // var selectParam = this.select
+        for (var i = 0; i < this.payload.length; i++) {
+          this.payloadLabels.push(this.payload[i].timestamp)
+          for (var property in this.payload[i]) {
+            if (Object.prototype.hasOwnProperty.call(this.payload[i], property) && property.toString().toLowerCase().includes('temp')) {
+              this.payloadParam.push(this.payload[i][property])
+            }
+            if (Object.prototype.hasOwnProperty.call(this.payload[i], this.select)) {
+              this.payloadParam.push(this.payload[i][this.select])
+            }
+          }
+        }
+        this.lineChartData = {
+          labels: this.payloadLabels.reverse(),
+          datasets: [
             {
               type: 'line',
-              label: 'Humidity',
-              data: this.payloadHumidity.reverse(),
+              label: this.select,
+              data: this.payloadParam.reverse(),
               fill: false,
-              borderColor: 'rgb(10,132,255)',
-              // backgroundColor: '#2554FF',
+              borderColor: 'rgba(0,14,84)',
+              // backgroundColor: 'rgb(255, 131, 125)',
               borderWidth: 4
             }
           ]
@@ -244,11 +309,17 @@ export default {
         this.showAlertChart = true
         this.refresh = true
       }
+    },
+    payloadHeaders: function (newVal, oldVal) {
+      if (newVal) {
+        this.selectOptions()
+      }
     }
   },
   computed: {
     ...mapGetters({
       payload: 'payload',
+      payloadHeaders: 'payloadHeaders',
       alertPayload: 'alertPayload',
       siteBuilding: 'siteBuilding',
       alertData: 'alertData',
@@ -265,13 +336,26 @@ export default {
     // Fetches the desired sensor data and alerts and stores the custom payload in state.alertPayload and state.payload
     // Lastly it stores the raw data in state.alertDate and state.data
     this.getCollectionData({ database: this.$route.query.database, collection: this.$route.query.sensor, Day: 1 })
+    this.selectOptions()
   },
   methods: {
     ...mapActions({
       getCollectionData: 'getCollectionData'
     }),
+    selectOptions () {
+      this.items = []
+      console.log(this.payloadHeaders)
+      if (this.payloadHeaders) {
+        this.payloadHeaders.forEach(res => {
+          if (res.text !== 'Timestamp') {
+            this.items.push(res)
+          }
+        })
+        this.items.push({ text: 'Alerts', value: 'Alerts' })
+      }
+    },
     // Get new data with new range
-    reload (day) {
+    async reload (day) {
       var obj = {
         database: this.$route.params.name,
         collection: this.$route.query.sensor,
@@ -283,8 +367,7 @@ export default {
       this.alertThreshold = []
       this.alertChartData = []
       this.payloadLabels = []
-      this.payloadInternalTemp = []
-      this.payloadHumidity = []
+      this.payloadParam = []
       this.mixChartData = {}
       this.lineChartData = {}
       this.getCollectionData(obj)
