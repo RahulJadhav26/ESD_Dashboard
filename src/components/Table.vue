@@ -7,13 +7,129 @@
   color="deep-purple lighten-3"
   :timeout="timeout">Alert Acknowledgement Request Sent
   </v-snackbar>
-    <v-card
+
+  <!--  -->
+  <!--  -->
+  <!--  -->
+  <!-- VERSION 1 OF TABLE WITH WITH VUETIFY DATA TABLE (LEGACY TABLE, IT CANT HANDLE PARTIAL VALUES SEND BY SENSOR DURING WEAK CONNECTIVITY) -->
+    <!-- <v-card
     class="Card">
       <v-toolbar flat>
       <v-card-title>
         <h2 class="text">{{this.$route.query.sensor}}</h2>
       </v-card-title>
       <v-spacer></v-spacer>
+      <v-card-actions>
+        <v-row justify="center">
+          <v-dialog
+            v-model="dialog"
+            scrollable
+            max-width="50%"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+               color="primary"
+                v-bind="attrs"
+                v-on="on"
+                dark
+                style="margin-right:40px;"
+              >
+                Download
+              </v-btn>
+
+            </template>
+            <v-card>
+                  <v-card-title>Select Range</v-card-title>
+                  <v-divider></v-divider>
+                  <v-card-text >
+                      <v-row >
+                          <v-col
+                            cols="12"
+                            sm="6"
+                          >
+                            <v-date-picker
+                              v-model="dates"
+                              range
+                              class="justify-center"
+                            ></v-date-picker>
+                          </v-col>
+                          <v-col
+                            cols="12"
+                            sm="6"
+                          >
+                          <v-text-field
+                              v-model="dateRangeText"
+                              label="Date range"
+                              prepend-icon="mdi-calendar"
+                              readonly
+                            ></v-text-field>
+                          </v-col>
+                        </v-row>
+                  </v-card-text>
+                  <v-divider></v-divider>
+                  <v-card-actions>
+                    <v-btn
+                      color="blue darken-1"
+                      text
+                      @click="dialog = false"
+                    >
+                      Close
+                    </v-btn>
+                    <v-btn
+                      color="blue darken-1"
+                      text
+                      disabled
+                      @click="dialog = false; Download()"
+                    >
+                      Download
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </v-row>
+        <v-btn class="primary mt-3" disabled @click="DownloadAll()">Download All</v-btn>
+      </v-card-actions>
+      <v-text-field
+      class="mt-3"
+          v-model="search"
+          append-icon="mdi-magnify"
+          label="Search"
+          single-line
+          hide-details
+        ></v-text-field>
+      </v-toolbar>
+      <div class=" text text-center">
+        <v-progress-circular
+          :size="70"
+          :width="7"
+          color="blue"
+          indeterminate
+          v-if="!refresh"
+        ></v-progress-circular>
+      </div>
+      <v-card-text class='text'>Total number of readings: {{payload.length}}</v-card-text>
+      <v-data-table
+        class="text"
+        :headers="payloadHeaders"
+        :search="search"
+        :items="payload"
+        v-if="refresh"
+      >
+      </v-data-table>
+    </v-card> -->
+    <br>
+    <!--  -->
+    <!--  -->
+    <!--  -->
+    <!--  -->
+    <!--  -->
+    <!-- VERSION 2 of TABLE HANDLING THE DATA WHEN SENSOR IS SENDING PARTIAL VALUES -->
+    <v-card  class="Card p-2">
+      <v-toolbar flat>
+      <v-card-title>
+        <h2 class="text">{{this.$route.query.sensor}}</h2>
+      </v-card-title>
+       <v-spacer></v-spacer>
       <v-card-actions>
         <v-row justify="center">
           <v-dialog
@@ -86,14 +202,6 @@
         <v-btn class="primary mt-3" disabled @click="DownloadAll()">Download All</v-btn>
         <!-- <v-btn class="primary mt-3" @click="getAllData()">Refresh</v-btn> -->
       </v-card-actions>
-      <v-text-field
-      class="mt-3"
-          v-model="search"
-          append-icon="mdi-magnify"
-          label="Search"
-          single-line
-          hide-details
-        ></v-text-field>
       </v-toolbar>
       <div class=" text text-center">
         <v-progress-circular
@@ -105,17 +213,51 @@
         ></v-progress-circular>
       </div>
       <v-card-text class='text'>Total number of readings: {{payload.length}}</v-card-text>
-      <v-data-table
-        class="text"
-        :headers="payloadHeaders"
-        :search="search"
-        :items="payload"
-        v-if="refresh"
-      >
-      <!-- <template v-slot:header="{ header }">
-      <h1> {{ "hello" + header.text}} </h1>
-    </template> -->
-      </v-data-table>
+      <v-simple-table
+      fixed-header
+      height="500px">
+        <template v-slot:default>
+        <thead>
+        <tr>
+          <th class="text-left">Timestamp</th>
+          <th class="text-left">Reading</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr  v-for="i in payload" :key="i.timestamp">
+              <td>{{i.timestamp}}</td>
+              <td>
+                <v-card
+                class="d-flex justify-left"
+                flat>
+                  <v-card
+                  tile
+                  v-for="(value,index) in i" :key="index"
+                  >
+                    <v-card-text class="ml-2" v-if="index !=='timestamp'">{{index}}: {{value}}</v-card-text>
+                  </v-card>
+                </v-card>
+                <!-- <v-card
+                    flat class="d-flex justify-space-around flatCard"
+                    v-for="(value,index) in i" :key="index"
+                  >
+                    <v-card
+                      outlined
+                      class="d-flex justify-content-around"
+                      tile
+                      v-if="index !== 'timestamp'"
+                    >
+                    <v-card-text>{{index}}: {{value}}</v-card-text>
+                    </v-card>
+                </v-card> -->
+                <!-- <v-col v-for="(value,index) in i" :key="index">
+                    <p v-if="index !== 'timestamp'">{{index}}: {{value}}</p>
+                  </v-col> -->
+              </td>
+            </tr>
+        </tbody>
+        </template>
+      </v-simple-table>
     </v-card>
     <br>
     <v-card
@@ -312,8 +454,17 @@ export default {
 <style scoped>
 .Card{
 border-radius: 1.7rem !important;
+padding: 5px;
 /* border: 2px solid rgba(247,105,0,0.6); */
+/* border: 3px solid rgb(88, 86, 214, 0.6); */
 border: 3px solid rgb(88, 86, 214, 0.6);
 /* background: rgb(229,229,234) !important; */
+/* background: transparent  !important;; */
+}
+/* tr:hover{
+  box-shadow: 0px 1px 5px;
+} */
+.text{
+  color:rgba(0,14,84);
 }
 </style>
