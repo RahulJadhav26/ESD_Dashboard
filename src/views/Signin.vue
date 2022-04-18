@@ -2,6 +2,7 @@
   <div>
       <h1 class="text-center text">Register New User</h1>
       <Errors v-if="errors" :msg='errors'/>
+      {{errors}}
             <v-card flat class="d-flex justify-space-around flatCard">
                 <form @submit.prevent='registerUser()'>
                     <div class="form-group">

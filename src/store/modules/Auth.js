@@ -114,7 +114,7 @@ const mutations = {
     state.status = 'loading'
   },
   register_success (state) {
-    state.error = null
+    state.error = ''
     state.status = 'success'
   },
   register_error (state, err) {
