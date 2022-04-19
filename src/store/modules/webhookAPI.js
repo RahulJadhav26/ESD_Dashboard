@@ -1,11 +1,11 @@
 import routes from '../../services/routes'
 const state = {
-  data: [],
-  alertData: [],
-  payload: [],
-  alertPayload: [],
+  data: [], // Stores the complete raw uplink data
+  alertData: [], // Stores the complete raw alert data
+  payload: [], // Stores the payload containing only sensor parameter
+  alertPayload: [], // Stores the alert payload containing only sensor parameter
   refresh: false,
-  sensors: [],
+  sensors: [], // Stores all the sensors
   siteBuilding: '',
   databases: [],
   buildings: [],
@@ -100,6 +100,8 @@ const mutations = {
   },
   'GET_SENSOR_DATA' (state, obj) {
     routes.getCollectionData(obj).then(data => {
+      // Initializing all the variables to null
+
       state.refresh = false
       state.data = []
       state.alertData = []
@@ -111,6 +113,9 @@ const mutations = {
       console.log(data.data.data.length)
       console.log('Inside Mutation')
       console.log(state.refresh)
+
+      // Checks if sensor has any recorded values or not ?
+
       if (data.data.data.length === 0 && data.data.alerts.length === 0) {
         state.data = data.data.data
         state.alertData = data.data.alerts
@@ -121,6 +126,9 @@ const mutations = {
         state.refresh = false
         console.log('Getting Data')
         console.log(state.refresh)
+        // If the sensor has some recorded data then fetch the payload
+        // "keys"(Sensor parameters) inside the raw data and store it in payloadHeaders variable
+
         data.data.data[0].event_data.payload.forEach(element => {
           headers = {
             text: element.name,
@@ -129,10 +137,17 @@ const mutations = {
           state.payloadHeaders.push(headers)
         })
         state.payloadHeaders.push({ text: 'Timestamp', value: 'timestamp' })
+
+        //  For every recorded alert it creates a customPayload and stores the required parameter
+
         for (var i in data.data.alerts) {
           data.data.alerts[i].customPayload = data.data.alerts[i].event_data
           data.data.alerts[i].customPayload.id = data.data.alerts[i]._id
           data.data.alerts[i].customPayload.device = data.data.alerts[i].device.thing_name
+
+          // If alert.event_data has timestamp it converts that timestamp to Date and Time and pushes inside
+          // the customPayload
+
           if (Object.prototype.hasOwnProperty.call(data.data.alerts[i].event_data, 'timestamp')) {
             var date1 = new Date(Number(data.data.alerts[i].event_data.timestamp))
             date1 = 'TIME: ' + date1.getHours() +
@@ -142,9 +157,16 @@ const mutations = {
             '/' + date1.getDate() +
             '/' + date1.getFullYear()
             data.data.alerts[i].customPayload.date = date1
+
+            // It pushes the newly created customPayload with desired parameters into alertPayload
+
             state.alertPayload.push(data.data.alerts[i].customPayload)
           }
         }
+
+        // If alert.event_data has timestamp it converts that timestamp to Date and Time and pushes inside
+        // the customPayload
+
         for (var j in data.data.data) {
           if (Object.prototype.hasOwnProperty.call(data.data.data[j].event_data, 'timestamp')) {
             var date = new Date(data.data.data[j].event_data.payload[0].timestamp)
@@ -155,13 +177,23 @@ const mutations = {
             '/' + date.getDate() +
             '/' + date.getFullYear()
           }
+
+          // Creates a temporary obj variable object to store the desired timestamp
+          // and all the event_data payload parameters into the obj
+
           var obj = {}
           obj.timestamp = date
           data.data.data[j].event_data.payload.forEach(element => {
             obj[element.name] = element.value
           })
+
+          // pushes the temporary obj to payload
+
           state.payload.push(obj)
         }
+
+        // Declares the final values to the state parameters
+
         state.data = data.data.data
         state.alertData = data.data.alerts
         state.refresh = true

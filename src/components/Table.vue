@@ -215,7 +215,7 @@
       <v-card-text class='text'>Total number of readings: {{payload.length}}</v-card-text>
       <v-simple-table
       fixed-header
-      height="500px">
+      >
         <template v-slot:default>
         <thead>
         <tr>
@@ -224,17 +224,17 @@
         </tr>
         </thead>
         <tbody>
-            <tr  v-for="i in payload" :key="i.timestamp">
-              <td>{{i.timestamp}}</td>
+            <tr  v-for="i in tableData" :key="i.timestamp">
+              <td class="text font-weight-bold">{{i.timestamp}}</td>
               <td>
                 <v-card
                 class="d-flex justify-left"
                 flat>
                   <v-card
-                  tile
+                  flat
                   v-for="(value,index) in i" :key="index"
                   >
-                    <v-card-text class="ml-2" v-if="index !=='timestamp'">{{index}}: {{value}}</v-card-text>
+                    <v-card-text class="ml-2 text"  v-if="index !=='timestamp'">{{index}}: {{value}}</v-card-text>
                   </v-card>
                 </v-card>
                 <!-- <v-card
@@ -258,6 +258,14 @@
         </tbody>
         </template>
       </v-simple-table>
+        <div class="text-center">
+          <v-pagination
+            v-model="page"
+            :length="length"
+            total-visible="8"
+            circle
+          ></v-pagination>
+        </div>
     </v-card>
     <br>
     <v-card
@@ -326,6 +334,7 @@ export default {
     search: '',
     dialogm1: '',
     dialog: false,
+    page: 1,
     dates: [],
     snackbar: false,
     timeout: 5000,
@@ -355,11 +364,6 @@ export default {
       }
     ]
   }),
-  // created () {
-  //   this.getCollectionData({ database: this.siteBuilding, collection: this.$route.params.name }).then(() => {
-  //     this.headers = this.payloadHeaders
-  //   })
-  // },
   computed: {
     ...mapGetters({
       data: 'data',
@@ -369,6 +373,13 @@ export default {
       refresh: 'refresh',
       payloadHeaders: 'payloadHeaders'
     }),
+    tableData () {
+      return this.payload.slice((this.page - 1) * 10, (this.page - 1) * 10 + 10)
+    },
+    length () {
+      var length = Math.ceil(this.payload.length / 10)
+      return length
+    },
     dateRangeText () {
       return this.dates.join(' ~ ')
     },

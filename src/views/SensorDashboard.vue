@@ -143,87 +143,89 @@ export default {
   },
   watch: {
     select: function (newVal, oldVal) {
-      this.showChart = false
-      this.payloadLabels = []
-      this.payloadParam = []
-      this.mixChartData = {}
-      this.lineChartData = {}
-      if (newVal !== 'Alerts') {
+      if (this.payload.length === 0) {
+        this.showChart = true
+        this.showAlertChart = true
+        this.refresh = true
+      } else {
+        this.showChart = false
         this.payloadLabels = []
         this.payloadParam = []
-        console.log(this.lineChartData)
-        // var selectParam = this.select
-        for (var i = 0; i < this.payload.length; i++) {
-          this.payloadLabels.push(this.payload[i].timestamp)
-          for (var property in this.payload[i]) {
-            if (Object.prototype.hasOwnProperty.call(this.payload[i], property) && property.toString().toLowerCase().includes('temp')) {
-              this.payloadParam.push(this.payload[i][property])
-            }
+        this.mixChartData = {}
+        this.lineChartData = {}
+        if (newVal !== 'Alerts') {
+          this.payloadLabels = []
+          this.payloadParam = []
+
+          for (var i = 0; i < this.payload.length; i++) {
+            this.payloadLabels.push(this.payload[i].timestamp)
+
             if (Object.prototype.hasOwnProperty.call(this.payload[i], this.select)) {
               this.payloadParam.push(this.payload[i][this.select])
             }
           }
-        }
-        this.lineChartData = {
-          labels: this.payloadLabels.reverse(),
-          datasets: [
-            {
-              type: 'line',
-              label: this.select,
-              data: this.payloadParam.reverse(),
-              fill: false,
-              borderColor: 'rgba(0,14,84)',
-              // backgroundColor: 'rgb(255, 131, 125)',
-              borderWidth: 4
-            }
-          ]
-        }
-        this.showChart = true
-        this.refresh = true
-      } else {
-        this.alertLabels = []
-        this.alertThreshold = []
-        this.alertChartData = []
-        this.showAlertChart = false
-        this.refresh = false
-        for (var j in newVal) {
-          this.alertChartData.push(newVal[j].value)
-          var date = new Date(Number(newVal[j].timestamp))
-          date = date.getHours() +
+          this.lineChartData = {
+            labels: this.payloadLabels.reverse(),
+            datasets: [
+              {
+                type: 'line',
+                label: this.select,
+                data: this.payloadParam.reverse(),
+                fill: false,
+                borderColor: 'rgb(255, 99, 132)',
+                // backgroundColor: 'rgb(255, 131, 125)',
+                borderWidth: 4
+              }
+            ]
+          }
+          this.showChart = true
+          this.refresh = true
+        } else if (newVal === 'Alerts') {
+          this.alertLabels = []
+          this.alertThreshold = []
+          this.alertChartData = []
+          this.showChart = false
+          this.showAlertChart = false
+          this.refresh = false
+          for (var j in this.alertPayload) {
+            this.alertChartData.push(this.alertPayload[j].value)
+            var date = new Date(Number(this.alertPayload[j].timestamp))
+            date = date.getHours() +
           ':' + date.getMinutes() +
           ':' + date.getSeconds() +
            ' ' + (date.getMonth() + 1) +
           '/' + date.getDate() +
           '/' + date.getFullYear()
-          this.alertLabels.push(date)
-          this.alertThreshold.push(newVal[j].triggerData.triggers[0].conditions[0].value)
-        }
-        this.mixChartData = {
-          labels: this.alertLabels.reverse(),
-          datasets: [{
-            label: 'Alerts',
-            borderWidth: 2,
-            borderColor: 'rgba(75, 192, 192)',
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            data: this.alertChartData.reverse()
-          },
-          {
-            type: 'line',
-            label: 'Threshold',
-            data: this.alertThreshold.reverse(),
-            fill: false,
-            borderWidth: 4,
-            borderColor: 'rgb(255, 99, 132)',
-            backgroundColor: 'rgba(255, 99, 132, 0.2)'
+            this.alertLabels.push(date)
+            this.alertThreshold.push(this.alertPayload[j].triggerData.triggers[0].conditions[0].value)
           }
-          ]
+          this.mixChartData = {
+            labels: this.alertLabels.reverse(),
+            datasets: [{
+              label: 'Alerts',
+              borderWidth: 2,
+              borderColor: 'rgba(75, 192, 192)',
+              backgroundColor: 'rgba(75, 192, 192, 0.2)',
+              data: this.alertChartData.reverse()
+            },
+            {
+              type: 'line',
+              label: 'Threshold',
+              data: this.alertThreshold.reverse(),
+              fill: false,
+              borderWidth: 4,
+              borderColor: 'rgb(255, 99, 132)',
+              backgroundColor: 'rgba(255, 99, 132, 0.2)'
+            }
+            ]
+          }
+          this.showAlertChart = true
+          this.showChart = true
+          this.refresh = true
         }
-        this.showAlertChart = true
-        this.refresh = true
       }
     },
     payload: function (newVal, oldVal) {
-      console.log(this.refresh)
       if (newVal.length === 0) {
         this.showChart = true
         this.showAlertChart = true
@@ -233,16 +235,10 @@ export default {
         this.payloadParam = []
         this.showChart = false
         this.refresh = false
-        // var selectParam = this.select
         for (var i = 0; i < this.payload.length; i++) {
           this.payloadLabels.push(this.payload[i].timestamp)
-          for (var property in this.payload[i]) {
-            if (Object.prototype.hasOwnProperty.call(this.payload[i], property) && property.toString().toLowerCase().includes('temp')) {
-              this.payloadParam.push(this.payload[i][property])
-            }
-            if (Object.prototype.hasOwnProperty.call(this.payload[i], this.select)) {
-              this.payloadParam.push(this.payload[i][this.select])
-            }
+          if (Object.prototype.hasOwnProperty.call(this.payload[i], this.select)) {
+            this.payloadParam.push(this.payload[i][this.select])
           }
         }
         this.lineChartData = {
@@ -253,7 +249,7 @@ export default {
               label: this.select,
               data: this.payloadParam.reverse(),
               fill: false,
-              borderColor: 'rgba(0,14,84)',
+              borderColor: 'rgb(255, 99, 132)',
               // backgroundColor: 'rgb(255, 131, 125)',
               borderWidth: 4
             }
@@ -333,7 +329,8 @@ export default {
     }
   },
   created () {
-    // Fetches the desired sensor data and alerts and stores the custom payload in state.alertPayload and state.payload
+    // Fetches the desired sensor data and alerts and stores the custom payload in
+    // state.alertPayload and state.payload
     // Lastly it stores the raw data in state.alertDate and state.data
     this.getCollectionData({ database: this.$route.query.database, collection: this.$route.query.sensor, Day: 1 })
     this.selectOptions()
@@ -344,7 +341,6 @@ export default {
     }),
     selectOptions () {
       this.items = []
-      console.log(this.payloadHeaders)
       if (this.payloadHeaders) {
         this.payloadHeaders.forEach(res => {
           if (res.text !== 'Timestamp') {
@@ -353,6 +349,7 @@ export default {
         })
         this.items.push({ text: 'Alerts', value: 'Alerts' })
       }
+      this.select = this.items[0].value
     },
     // Get new data with new range
     async reload (day) {
