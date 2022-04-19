@@ -98,7 +98,7 @@ export default {
         scales: {
           yAxes: [{
             ticks: {
-              beginAtZero: true
+              beginAtZero: false
             },
             gridLines: {
               display: true
@@ -106,7 +106,14 @@ export default {
           }],
           xAxes: [{
             gridLines: {
-              display: false
+              display: true
+            },
+            ticks: {
+              beginAtZero: false,
+              autoSkip: true,
+              maxTicksLimit: 7,
+              maxRotation: 0,
+              minRotation: 0
             }
           }]
         },
