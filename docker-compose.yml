@@ -1,4 +1,4 @@
-version: '3.9'
+version: '3.3'
 
 services:
 
@@ -34,7 +34,7 @@ services:
 
   webhook_api:
     container_name: webhook
-    build: ./webhook
+    build: ./webhook/
     ports: 
       - 8888:8888
     environment:
