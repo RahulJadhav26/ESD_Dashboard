@@ -348,14 +348,29 @@ export default {
     }),
     selectOptions () {
       this.items = []
-      if (this.payloadHeaders) {
-        this.payloadHeaders.forEach(res => {
-          if (res.text !== 'Timestamp') {
-            this.items.push(res)
-          }
-        })
-        this.items.push({ text: 'Alerts', value: 'Alerts' })
+      if (this.$route.query.sensor.includes('ESD_MSIGHT')) {
+        this.items = [
+          { text: 'Temperature', value: 'Temperature' },
+          { text: 'Humidity', value: 'Humidity' },
+          { text: 'Motion', value: 'Motion' },
+          { text: 'Light', value: 'Light' },
+          { text: 'CO2', value: 'CO2' },
+          { text: 'TVOC', value: 'TVOC' },
+          { text: 'Converted TVOC', value: 'Converted TVOC' },
+          { text: 'Pressure', value: 'Pressure' },
+          { text: 'RSSI', value: 'RSSI' },
+          { text: 'SNR', value: 'SNR' }
+        ]
+      } else {
+        if (this.payloadHeaders) {
+          this.payloadHeaders.forEach(res => {
+            if (res.text !== 'Timestamp') {
+              this.items.push(res)
+            }
+          })
+        }
       }
+      this.items.push({ text: 'Alerts', value: 'Alerts' })
       this.select = this.items[0].value
     },
     // Get new data with new range
