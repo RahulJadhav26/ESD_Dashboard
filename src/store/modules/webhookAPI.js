@@ -58,6 +58,8 @@ const mutations = {
     }).then(() => {
       if (state.data.length !== 0) {
         state.refresh = false
+      } else {
+        state.refresh = false
       }
     })
   },
@@ -115,7 +117,7 @@ const mutations = {
       console.log(state.refresh)
 
       // Checks if sensor has any recorded values or not ?
-
+      console.log(data.data)
       if (data.data.data.length === 0 && data.data.alerts.length === 0) {
         state.data = data.data.data
         state.alertData = data.data.alerts
@@ -126,6 +128,8 @@ const mutations = {
         state.refresh = false
         console.log('Getting Data')
         console.log(state.refresh)
+        // console.log(state.alertData)
+        // console.log(state.data)
         // If the sensor has some recorded data then fetch the payload
         // "keys"(Sensor parameters) inside the raw data and store it in payloadHeaders variable
 
@@ -199,6 +203,8 @@ const mutations = {
         state.refresh = true
         console.log('Got Data')
         console.log(state.refresh)
+        console.log(state.data)
+        console.log(state.alertData)
       }
       return state.data
     })

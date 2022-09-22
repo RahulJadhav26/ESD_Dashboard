@@ -53,6 +53,7 @@
         </v-row>
        </div>
        <div>
+        <!-- {{lineChartData}} -->
         <v-card  flat class="d-flex justify-center mx-2 flatCard">
           <v-card v-if="showChart && select != 'Alerts' " class="chartCard mx-1 pa-2" style="width:100%;">
               <line-chart :chartData="lineChartData" :options="options" />
@@ -165,10 +166,9 @@ export default {
           this.payloadParam = []
 
           for (var i = 0; i < this.payload.length; i++) {
-            this.payloadLabels.push(this.payload[i].timestamp)
-
             if (Object.prototype.hasOwnProperty.call(this.payload[i], this.select)) {
               this.payloadParam.push(this.payload[i][this.select])
+              this.payloadLabels.push(this.payload[i].timestamp)
             }
           }
           this.lineChartData = {
@@ -243,9 +243,9 @@ export default {
         this.showChart = false
         this.refresh = false
         for (var i = 0; i < this.payload.length; i++) {
-          this.payloadLabels.push(this.payload[i].timestamp)
           if (Object.prototype.hasOwnProperty.call(this.payload[i], this.select)) {
             this.payloadParam.push(this.payload[i][this.select])
+            this.payloadLabels.push(this.payload[i].timestamp)
           }
         }
         this.lineChartData = {
