@@ -11,7 +11,7 @@
         ></v-progress-circular>
     </div>
     <div v-if="showChart">
-      <h1 class="text-center text" style="text-decoration:underline;">DASHBOARD</h1>
+      <h1 class="text-center text" style="text-decoration:underline;">DASHBOARD v1</h1>
       <div class="m-1">
         <v-row>
         <v-col>
