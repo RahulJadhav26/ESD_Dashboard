@@ -289,7 +289,7 @@
         :search="alertsearch"
         :items="alertPayload"
       >
-      <!-- <template v-slot:item.triggered= "{ item }">
+      <template v-slot:item.triggered= "{ item }">
         <div>
           <v-chip
             class="ma-2"
@@ -308,8 +308,8 @@
           {{!item.triggered}}
           </v-chip>
         </div>
-      </template> -->
-      <!-- <template  v-slot:item.actions = "{ item }">
+      </template>
+      <template  v-slot:item.actions = "{ item }">
           <v-icon
             class="mr-2"
             @click="acknowledge(item)"
@@ -317,7 +317,7 @@
           >
             mdi-clipboard-check-outline
           </v-icon>
-      </template> -->
+      </template>
       </v-data-table>
     </v-card>
 </div>
@@ -353,15 +353,15 @@ export default {
       {
         text: 'Date',
         value: 'date'
+      },
+      {
+        text: 'Acknowledged',
+        value: 'triggered'
+      },
+      {
+        text: 'Actions',
+        value: 'actions'
       }
-      // {
-      //   text: 'Acknowledged',
-      //   value: 'triggered'
-      // },
-      // {
-      //   text: 'Actions',
-      //   value: 'actions'
-      // }
     ]
   }),
   computed: {
