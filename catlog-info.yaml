@@ -1,0 +1,13 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: esd-monitoring-dashboard
+  description: FrontEnd Dashboard for IoT Monitoring Service
+  tags:
+    - Development
+    - Frontend
+    - Team A 
+spec:
+  type: service
+  lifecycle: Development
+  owner: Rahul-Team
