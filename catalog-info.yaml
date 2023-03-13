@@ -4,10 +4,10 @@ metadata:
   name: esd-monitoring-dashboard
   description: FrontEnd Dashboard for IoT Monitoring Service
   tags:
-    - Development
-    - Frontend
-    - Team A 
+    - development
+    - frontend
+    - team-a 
 spec:
   type: service
-  lifecycle: Development
-  owner: Rahul-Team
+  lifecycle: development
+  owner: rahul-team
